@@ -41,20 +41,13 @@ class Kariyawan_ctrl extends CI_Controller
 			$this->load->view('Login_body');
 			$this->load->view('templates/Footer_LG');
 		} else {
+			$user = $this->input->post('user_name', true);
+			$email = $this->input->post('email', true);
+			$password = $this->input->post('password1');
 			$no_telp = $this->input->post('no_telp');
 			$gender = $this->input->post('gender');
 			$umur = $this->input->post('umur');
-			$data = [
-				'user_name' => htmlspecialchars($this->input->post('user_name', true)),
-				'email' => htmlspecialchars($this->input->post('email', true)),
-				'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
-				'role_id' => 1,
-				'is_active' => 1,
-				'no_telp' => $no_telp,
-				'gender' => $gender,
-				'umur' => $umur
-			];
-			$this->model_kariyawan->insert_registrasi($data);
+			$this->model_kariyawan->insert_registrasi($user, $email, $password, $no_telp, $gender, $umur);
 			redirect(base_url('index.php/Kariyawan_ctrl'));
 		}
 	}
