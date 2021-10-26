@@ -4,7 +4,7 @@ class Kariyawan_ctrl extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Model_kariyawan');
+		$this->load->model('model_kariyawan');
 	}
 	public function index()
 	{
@@ -35,43 +35,27 @@ class Kariyawan_ctrl extends CI_Controller
 		$this->form_validation->set_rules('no_telp', 'phone number', 'required|trim', ['required' => 'nomer telepon harus di isi']);
 		$this->form_validation->set_rules('gender', 'gender', 'required|trim', ['required' => 'gender harus di pilih']);
 		$this->form_validation->set_rules('umur', 'umur', 'required|trim', ['required' => 'umur harus di isi']);
-		$data['file_cv'] = '';
-		$file_cv = $_FILES['file']['name'];
-		$config['upload_path'] = './asset/document/';
-		$config['allowed_types'] = 'doc|docx';
 
-		$this->load->library('upload', $config);
-
-		if (!$this->upload->do_upload('file') || $this->form_validation->run() == false) {
-			# code...
+		if ($this->form_validation->run() == FALSE) {
 			$this->load->view('templates/Header_LG');
 			$this->load->view('Login_body');
 			$this->load->view('templates/Footer_LG');
-		} elseif ($this->form_validation->run() == TRUE) {
-			# code...
-			$user_name = $this->input->post('user_name');
-			$email = $this->input->post('email');
-			$password = $this->input->post('password');
-			$role_id = '1';
-			$is_active = '1';
+		} else {
 			$no_telp = $this->input->post('no_telp');
 			$gender = $this->input->post('gender');
 			$umur = $this->input->post('umur');
-			$file_cv = $this->input->post('file_cv');
 			$data = [
-				'user_name' => $user_name,
-				'email' => $email,
-				'password' => $password,
-				'role_id' => $role_id,
-				'is_active' => $is_active,
+				'user_name' => htmlspecialchars($this->input->post('user_name', true)),
+				'email' => htmlspecialchars($this->input->post('email', true)),
+				'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
+				'role_id' => 1,
+				'is_active' => 1,
 				'no_telp' => $no_telp,
 				'gender' => $gender,
-				'umur' => $umur,
-				'file_cv' => $file_cv
+				'umur' => $umur
 			];
-			$this->model;
-		} else {
-			# code...
+			$this->model_kariyawan->insert_registrasi($data);
+			redirect(base_url('index.php/Kariyawan_ctrl'));
 		}
 	}
 }
