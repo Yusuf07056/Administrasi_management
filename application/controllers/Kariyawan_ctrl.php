@@ -51,4 +51,18 @@ class Kariyawan_ctrl extends CI_Controller
 			redirect(base_url('index.php/Kariyawan_ctrl'));
 		}
 	}
+	public function login()
+	{
+		# code...
+		$email = $this->input->post('email');
+		$password = $this->input->post('password');
+		$registrasi = $this->model_kariyawan->cek_email($email, $password);
+	}
+	public function upload_cv()
+	{
+		$this->load->view('templates/Header');
+		$this->load->view('sidebar/Sidebar');
+		$this->load->view('Upload_body');
+		$this->load->view('templates/Footer');
+	}
 }

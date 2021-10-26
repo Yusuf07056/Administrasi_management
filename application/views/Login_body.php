@@ -54,7 +54,7 @@
 
 			</form>
 
-			<form action="#" method="post" class="sign-in-form">
+			<form action="<?= base_url('index.php/Welcome/') ?>" method="post" class="sign-in-form">
 
 				<h2 class="title">Sign in</h2>
 				<?php
@@ -67,11 +67,11 @@
 				} ?>
 				<div class="input-field">
 					<i class="fas fa-user"></i>
-					<input type="text" placeholder="Username" />
+					<input type="text" placeholder="Email" name="email" id="email">
 				</div>
 				<div class="input-field">
 					<i class="fas fa-lock"></i>
-					<input type="password" placeholder="Password" />
+					<input type="password" placeholder="Password" name="password" id="password">
 				</div>
 				<input type="submit" value="Login" class="btn solid" />
 

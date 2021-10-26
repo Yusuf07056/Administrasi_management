@@ -74,7 +74,12 @@
   					<div class="job">Web designer</div>
   				</div>
   			</div>
-  			<i class='bx bx-log-out' id="log_out"></i>
+  			<form action="<?= base_url('index.php/Welcome/logout') ?>" method="post">
+  				<button>
+  					<i class='bx bx-log-out' id="log_out"></i>
+  				</button>
+  			</form>
+
   		</li>
   	</ul>
   </div>
