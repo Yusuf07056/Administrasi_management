@@ -38,7 +38,7 @@ class model_adm extends CI_Model
 				$this->session->set_userdata($data);
 
 				if ($registrasi['role_id'] == 2) {
-					redirect(base_url('index.php/Kariyawan_ctrl/upload_cv'));
+					redirect(base_url('index.php/Kariyawan_ctrl/main_page'));
 				} elseif ($registrasi['role_id'] == 1) {
 					redirect(base_url('index.php/Welcome/dashboard'));
 				} else {

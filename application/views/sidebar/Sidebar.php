@@ -38,28 +38,28 @@
   			<span class="tooltip">Analytics</span>
   		</li>
   		<li>
-  			<a href="<?= base_url('index.php/Welcome') ?>">
+  			<a href="<?= base_url('index.php/Welcome/create_post') ?>">
   				<i class='bx bx-folder'></i>
   				<span class="links_name">File Manager</span>
   			</a>
   			<span class="tooltip">Files</span>
   		</li>
   		<li>
-  			<a href="<?= base_url('index.php/Welcome') ?>">
+  			<a href="<?= base_url('') ?>">
   				<i class='bx bx-cart-alt'></i>
   				<span class="links_name">Order</span>
   			</a>
   			<span class="tooltip">Order</span>
   		</li>
   		<li>
-  			<a href="<?= base_url('index.php/Welcome') ?>">
+  			<a href="<?= base_url('') ?>">
   				<i class='bx bx-heart'></i>
   				<span class="links_name">Saved</span>
   			</a>
   			<span class="tooltip">Saved</span>
   		</li>
   		<li>
-  			<a href="<?= base_url('index.php/Welcome') ?>">
+  			<a href="<?= base_url('') ?>">
   				<i class='bx bx-cog'></i>
   				<span class="links_name">Setting</span>
   			</a>

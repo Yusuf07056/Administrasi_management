@@ -8,10 +8,26 @@ class Kariyawan_ctrl extends CI_Controller
 	}
 	public function index()
 	{
-		# code...
-		$this->load->view('templates/Header_LG');
-		$this->load->view('Login_body');
-		$this->load->view('templates/Footer_LG');
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email', [
+			'required' => 'email required'
+		]);
+		$this->form_validation->set_rules('password', 'Password', 'required|trim', [
+			'required' => 'password required'
+		]);
+		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			# code...
+			// $this->dashboard();
+			redirect(base_url('index.php/Welcome/dashboard'));
+		} elseif ($this->form_validation->run() == FALSE) {
+			# code...
+			$this->load->view('templates/Header_LG');
+			$this->load->view('Login_body');
+			$this->load->view('templates/Footer_LG');
+		} else {
+			# code...
+			$this->login();
+		}
 	}
 	public function registrasi()
 	{
@@ -64,5 +80,19 @@ class Kariyawan_ctrl extends CI_Controller
 		$this->load->view('sidebar/Sidebar');
 		$this->load->view('Upload_body');
 		$this->load->view('templates/Footer');
+	}
+	public function main_page()
+	{
+		# code...
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			$this->load->view('templates/Header');
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Postingan_body');
+			$this->load->view('templates/Footer');
+		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			# code...
+			redirect(base_url('index.php/Welcome/'));
+		}
 	}
 }
