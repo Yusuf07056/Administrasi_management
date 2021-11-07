@@ -23,6 +23,7 @@ class Welcome extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('model_adm');
+		$this->load->helper(array('form', 'url'));
 	}
 	public function index()
 	{
@@ -146,37 +147,38 @@ class Welcome extends CI_Controller
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$email = $this->session->userdata('email');
 		$role_id = $this->session->userdata('role_id');
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') !== 1) {
+		$this->form_validation->set_rules('judul', 'Judul', 'required');
+		$this->form_validation->set_rules('isi', 'Isi', 'required');
+		$this->form_validation->set_rules('status', 'Status', 'required');
+		$data['thumbnail'] = '';
+		$thumbnail = $_FILES['thumbnail']['name'];
+		$config['upload_path'] = './asset/images';
+		$config['allowed_types'] = 'jpg|png|jpeg';
+		$this->load->library('upload', $config);
+
+		if (empty($email) && $role_id != 1) {
 			# code...
 			$this->session->unset_userdata('email');
 			$this->session->unset_userdata('role_id');
 			redirect(base_url('index.php/Welcome/'));
-		} elseif (empty($email) && $role_id !== 1) {
+		} elseif (!$this->upload->do_upload('thumbnail') && $this->form_validation->run() == false) {
 			# code...
-			redirect(base_url('index.php/Welcome/'));
-		} elseif ($email === TRUE && $role_id === 1) {
+			echo "upload gagal";
+		} elseif ($this->form_validation->run() == true) {
 			# code...
-			$this->form_validation->set_rules('fieldname', 'fieldlabel', 'trim|required|min_length[5]|max_length[12]');
-			$this->form_validation->set_rules('fieldname', 'fieldlabel', 'trim|required|min_length[5]|max_length[12]');
-			$this->form_validation->set_rules('fieldname', 'fieldlabel', 'trim|required|min_length[5]|max_length[12]');
-			$this->form_validation->set_rules('fieldname', 'fieldlabel', 'trim|required|min_length[5]|max_length[12]');
-
-			$data['foto'] = '';
-			$foto = $_FILES['gambar']['name'];
-			$config['upload_path'] = './asset/images';
-			$config['allowed_types'] = 'gif|jpg|png';
-
-			$this->load->library('upload', $config);
-
-			if (!$this->upload->do_upload('gambar') && $this->form_validaton->run() == FALSE) {
-				$this->create_post();
-			} else {
-				$judul_post = $this->input->post('judul_post');
-				$isi_post = $this->input->post('isi_post');
-				$status_post = $this->input->post('status_post');
-				$foto = $this->upload->data('gambar');
-				echo "success";
-			}
+			$judul_post = $this->input->post('judul');
+			$isi_post = $this->input->post('isi');
+			$status_post = $this->input->post('status');
+			$thumbnail = $this->upload->data('thumbnail');
+			$data = [
+				'judul_post' => $judul_post,
+				'isi_post' => $isi_post,
+			];
+			$data['thumbnail'] = $thumbnail;
+			$data['status_post'] = $status_post;
+			$this->db->insert('post_information', $data);
+			// $this->model_adm->insert_postingan($judul_post, $isi_post, $foto, $status_post);
+			redirect(base_url('index.php/Welcome/create_post'));
 		}
 	}
 }

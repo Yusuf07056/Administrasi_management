@@ -7,6 +7,14 @@ class model_adm extends CI_Model
 		$query = $this->db->get('registrasi');
 		return $query;
 	}
+
+	public function get_postingan()
+	{
+		# code...
+		$query = $this->db->get('post_information');
+		return $query;
+	}
+
 	public function insert_registrasi($user, $email, $password, $no_telp, $gender, $umur)
 	{
 		# code...
@@ -22,6 +30,25 @@ class model_adm extends CI_Model
 		];
 		$this->db->insert('registrasi', $data);
 	}
+
+	public function insert_postingan($judul_post, $isi_post, $foto, $status_post)
+	{
+		# code...
+		$data = array(
+			'judul_post' => $judul_post,
+			'isi_post' => $isi_post,
+			'foto' => $foto,
+			'status_post' => $status_post
+		);
+		// $data = [
+		// 	'judul_post' => $judul_post,
+		// 	'isi_post' => $isi_post
+		// ];
+		// $data['foto'] = $foto;
+		// $data['status_post'] = $status_post;
+		$this->db->insert('post_information', $data);
+	}
+
 	public function cek_email($email, $password)
 	{
 		# code...
