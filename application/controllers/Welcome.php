@@ -162,17 +162,16 @@ class Welcome extends CI_Controller
 			$judul_post = $this->input->post('judul');
 			$isi_post = $this->input->post('isi');
 			$status_post = $this->input->post('status');
-			$foto = $this->upload->data('gambar');
-			$data = [
-				'judul_post' => $judul_post,
-				'isi_post' => $isi_post,
-				'status_post' => $status_post,
-				'foto' => $foto
-			];
-
-			$this->db->insert('post_information', $data);
-			// $this->model_adm->insert_postingan($judul_post, $isi_post, $foto, $status_post);
-			redirect(base_url('index.php/Welcome/create_post'));
+			$foto = $this->upload->data('file_name');
+			// $data = [
+			// 	'judul_post' => $judul_post,
+			// 	'isi_post' => $isi_post,
+			// 	'status_post' => $status_post,
+			// 	'foto' => $foto
+			// ];
 		}
+		// $this->db->insert('post_information', $data);
+		$this->model_adm->insert_postingan($judul_post, $isi_post, $status_post, $foto);
+		redirect(base_url('index.php/Welcome/create_post'));
 	}
 }

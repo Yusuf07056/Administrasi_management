@@ -31,21 +31,15 @@ class model_adm extends CI_Model
 		$this->db->insert('registrasi', $data);
 	}
 
-	public function insert_postingan($judul_post, $isi_post, $foto, $status_post)
+	public function insert_postingan($judul_post, $isi_post, $status_post, $foto)
 	{
 		# code...
-		$data = array(
+		$data = [
 			'judul_post' => $judul_post,
 			'isi_post' => $isi_post,
-			'foto' => $foto,
-			'status_post' => $status_post
-		);
-		// $data = [
-		// 	'judul_post' => $judul_post,
-		// 	'isi_post' => $isi_post
-		// ];
-		// $data['foto'] = $foto;
-		// $data['status_post'] = $status_post;
+			'status_post' => $status_post,
+			'foto' => $foto
+		];
 		$this->db->insert('post_information', $data);
 	}
 
