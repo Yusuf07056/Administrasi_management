@@ -23,7 +23,6 @@ class Welcome extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('model_adm');
-		$this->load->helper(array('form', 'url'));
 	}
 	public function index()
 	{
@@ -144,38 +143,33 @@ class Welcome extends CI_Controller
 	public function input_post()
 	{
 		# code...
-		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		$email = $this->session->userdata('email');
-		$role_id = $this->session->userdata('role_id');
+		// $data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		// $email = $this->session->userdata('email');
+		// $role_id = $this->session->userdata('role_id');
 		$this->form_validation->set_rules('judul', 'Judul', 'required');
 		$this->form_validation->set_rules('isi', 'Isi', 'required');
 		$this->form_validation->set_rules('status', 'Status', 'required');
-		$data['thumbnail'] = '';
-		$thumbnail = $_FILES['thumbnail']['name'];
-		$config['upload_path'] = './asset/images';
+		$data['foto'] = '';
+		$foto = $_FILES['gambar']['name'];
+		$config['upload_path'] = './asset/image';
 		$config['allowed_types'] = 'jpg|png|jpeg';
 		$this->load->library('upload', $config);
-
-		if (empty($email) && $role_id != 1) {
-			# code...
-			$this->session->unset_userdata('email');
-			$this->session->unset_userdata('role_id');
-			redirect(base_url('index.php/Welcome/'));
-		} elseif (!$this->upload->do_upload('thumbnail') && $this->form_validation->run() == false) {
+		if (!$this->upload->do_upload('gambar') || $this->form_validation->run() == false) {
 			# code...
 			echo "upload gagal";
-		} elseif ($this->form_validation->run() == true) {
+		} else {
 			# code...
 			$judul_post = $this->input->post('judul');
 			$isi_post = $this->input->post('isi');
 			$status_post = $this->input->post('status');
-			$thumbnail = $this->upload->data('thumbnail');
+			$foto = $this->upload->data('gambar');
 			$data = [
 				'judul_post' => $judul_post,
 				'isi_post' => $isi_post,
+				'status_post' => $status_post,
+				'foto' => $foto
 			];
-			$data['thumbnail'] = $thumbnail;
-			$data['status_post'] = $status_post;
+
 			$this->db->insert('post_information', $data);
 			// $this->model_adm->insert_postingan($judul_post, $isi_post, $foto, $status_post);
 			redirect(base_url('index.php/Welcome/create_post'));

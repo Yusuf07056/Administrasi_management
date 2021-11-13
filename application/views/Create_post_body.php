@@ -45,19 +45,19 @@
 					<tr>
 						<td>
 							<p>ISI</p>
-							<textarea id="isi" name="isi" cols="30" rows="10" style="resize: none;"></textarea>
+							<textarea id="isi" name="isi" cols="30" rows="10" style="resize: none;" required></textarea>
 						</td>
 					</tr>
 					<tr align="center">
 						<td>
 							<br>
-							<input class="upload_box" type="file" name="thumbnail" id="thumbnail">
+							<input class="upload_box" type="file" name="gambar" id="gambar" required>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<br>
-							<select class="upload_box" name="status" id="status">
+							<select class="upload_box" name="status" id="status" required>
 								<option value=1>PUBLIHS</option>
 								<option value=2>DRAFT</option>
 							</select>
