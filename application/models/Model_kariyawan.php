@@ -7,6 +7,18 @@ class model_kariyawan extends CI_Model
 		$query = $this->db->get('registrasi');
 		return $query;
 	}
+
+	public function get_postingan()
+	{
+		# code...
+		return $this->db->get('post_information')->result_array();
+	}
+
+	public function get_profil($email)
+	{
+		return $this->db->get_where('registrasi', ['email' => $email]);
+	}
+
 	public function insert_registrasi($user, $email, $password, $no_telp, $gender, $umur)
 	{
 		# code...

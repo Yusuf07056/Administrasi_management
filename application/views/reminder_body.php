@@ -1,5 +1,5 @@
 <section class="home-section" style="text-align: center;">
-	<div class="text">PROFIL</div>
+	<div class="text">UPLOAD CV</div>
 	<br>
 	<div class="text">
 		<form action="" method="post">
@@ -12,23 +12,14 @@
 
 					</tr>
 					<tr>
-						<?php
-						foreach ($registrasi->result_array() as $profil) :
-						?>
-							<th>
-								<span>NAMA <?= $profil['user_name'] ?> </span>
-							</th>
-					</tr>
-					<tr>
 						<th>
-							<span>EMAIL <?= $profil['email'] ?> </span>
+							<span>NAMA</span>
 						</th>
 					</tr>
 					<tr>
 						<th>
-							<span>ID ROLE <?= $profil['role_id'] ?></span>
+							<span>ID</span>
 						</th>
-					<?php endforeach; ?>
 					</tr>
 				</thead>
 			</table>

@@ -55,10 +55,17 @@ class Welcome extends CI_Controller
 	}
 	public function profil()
 	{
-		$this->load->view('templates/Header');
-		$this->load->view('sidebar/Sidebar');
-		$this->load->view('Profil_body');
-		$this->load->view('templates/Footer');
+		$email = $this->session->userdata('email');
+		$data['registrasi'] = $this->model_adm->get_profil_adm($email);
+		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			$this->load->view('templates/Header');
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Profil_body', $data);
+			$this->load->view('templates/Footer');
+		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			# code...
+			redirect(base_url('index.php/Welcome/'));
+		}
 	}
 	public function dashboard()
 	{
@@ -77,11 +84,12 @@ class Welcome extends CI_Controller
 	public function create_post()
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
 			# code...
 			$this->load->view('templates/Header');
 			$this->load->view('sidebar/Sidebar');
-			$this->load->view('Create_post_body');
+			$this->load->view('Create_post_body', $data_postingan);
 			$this->load->view('templates/Footer');
 		} else {
 			# code...
@@ -142,10 +150,7 @@ class Welcome extends CI_Controller
 	}
 	public function input_post()
 	{
-		# code...
-		// $data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		// $email = $this->session->userdata('email');
-		// $role_id = $this->session->userdata('role_id');
+
 		$this->form_validation->set_rules('judul', 'Judul', 'required');
 		$this->form_validation->set_rules('isi', 'Isi', 'required');
 		$this->form_validation->set_rules('status', 'Status', 'required');
@@ -163,14 +168,7 @@ class Welcome extends CI_Controller
 			$isi_post = $this->input->post('isi');
 			$status_post = $this->input->post('status');
 			$foto = $this->upload->data('file_name');
-			// $data = [
-			// 	'judul_post' => $judul_post,
-			// 	'isi_post' => $isi_post,
-			// 	'status_post' => $status_post,
-			// 	'foto' => $foto
-			// ];
 		}
-		// $this->db->insert('post_information', $data);
 		$this->model_adm->insert_postingan($judul_post, $isi_post, $status_post, $foto);
 		redirect(base_url('index.php/Welcome/create_post'));
 	}

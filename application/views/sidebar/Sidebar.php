@@ -24,7 +24,7 @@
   			<span class="tooltip">User</span>
   		</li>
   		<li>
-  			<a href="<?= base_url('index.php/Welcome') ?>">
+  			<a href="<?= base_url('index.php/') ?>">
   				<i class='bx bx-chat'></i>
   				<span class="links_name">Messages</span>
   			</a>

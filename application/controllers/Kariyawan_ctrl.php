@@ -84,11 +84,27 @@ class Kariyawan_ctrl extends CI_Controller
 	public function main_page()
 	{
 		# code...
-		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		// $data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$email = $this->session->userdata('email');
+		$data['registrasi'] = $this->model_kariyawan->get_profil($email);
 		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
 			$this->load->view('templates/Header');
 			$this->load->view('sidebar/Sidebar');
-			$this->load->view('Postingan_body');
+			$this->load->view('Profil_body', $data);
+			$this->load->view('templates/Footer');
+		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			# code...
+			redirect(base_url('index.php/Welcome/'));
+		}
+	}
+	public function information()
+	{
+		# code...
+		$data['post_information'] = $this->model_kariyawan->get_postingan();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			$this->load->view('templates/Header');
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Profil_body', $data);
 			$this->load->view('templates/Footer');
 		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
 			# code...

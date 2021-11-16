@@ -11,8 +11,12 @@ class model_adm extends CI_Model
 	public function get_postingan()
 	{
 		# code...
-		$query = $this->db->get('post_information');
-		return $query;
+		return $this->db->get('post_information')->result_array();
+	}
+
+	public function get_profil_adm($email)
+	{
+		return $this->db->get_where('registrasi', ['email' => $email]);
 	}
 
 	public function insert_registrasi($user, $email, $password, $no_telp, $gender, $umur)
