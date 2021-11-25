@@ -81,6 +81,22 @@ class Kariyawan_ctrl extends CI_Controller
 		$this->load->view('Upload_body');
 		$this->load->view('templates/Footer');
 	}
+	public function feed_page()
+	{
+		# code...
+		$email = $this->session->userdata('email');
+		$data_postingan['post_information'] =  $this->model_kariyawan->get_postingan();
+		$data['registrasi'] = $this->model_kariyawan->get_profil($email);
+		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			$this->load->view('templates/Header_user');
+			$this->load->view('sidebar/navbar');
+			$this->load->view('home_user_body', $data_postingan);
+			$this->load->view('templates/Footer_user');
+		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			# code...
+			redirect(base_url('index.php/Welcome/'));
+		}
+	}
 	public function main_page()
 	{
 		# code...
@@ -88,10 +104,10 @@ class Kariyawan_ctrl extends CI_Controller
 		$email = $this->session->userdata('email');
 		$data['registrasi'] = $this->model_kariyawan->get_profil($email);
 		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
-			$this->load->view('templates/Header');
-			$this->load->view('sidebar/Sidebar');
+			$this->load->view('templates/Header_user');
+			$this->load->view('sidebar/navbar');
 			$this->load->view('Profil_body', $data);
-			$this->load->view('templates/Footer');
+			$this->load->view('templates/Footer_user');
 		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
 			# code...
 			redirect(base_url('index.php/Welcome/'));

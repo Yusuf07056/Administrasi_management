@@ -41,7 +41,7 @@ class Welcome extends CI_Controller
 				redirect(base_url('index.php/Welcome/dashboard'));
 			} elseif ($role_id == 2) {
 				# code...
-				redirect(base_url('index.php/Kariyawan_ctrl/main_page'));
+				redirect(base_url('index.php/Kariyawan_ctrl/feed_page'));
 			}
 		} elseif ($this->form_validation->run() == FALSE) {
 			# code...

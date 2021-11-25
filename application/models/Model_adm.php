@@ -8,6 +8,7 @@ class model_adm extends CI_Model
 		return $query;
 	}
 
+
 	public function get_postingan()
 	{
 		# code...
@@ -63,7 +64,7 @@ class model_adm extends CI_Model
 				$this->session->set_userdata($data);
 
 				if ($registrasi['role_id'] == 2) {
-					redirect(base_url('index.php/Kariyawan_ctrl/main_page'));
+					redirect(base_url('index.php/Kariyawan_ctrl/feed_page'));
 				} elseif ($registrasi['role_id'] == 1) {
 					redirect(base_url('index.php/Welcome/dashboard'));
 				} else {
