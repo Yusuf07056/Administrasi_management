@@ -89,9 +89,9 @@
 					<td><?= $post['id_post'] ?></td>
 					<td><?= $post['judul_post'] ?></td>
 					<td>
-						<a href="">EDIT</a>
+						<a href="<?= base_url('index.php/Welcome/update_post/') . $post['id_post'] ?>">EDIT</a>
 						||
-						<a href="">DELETE</a>
+						<a href="<?= base_url('index.php/Welcome/delete_post/') . $post['id_post'] ?>">Delete</a>
 					</td>
 				</tr>
 			<?php endforeach; ?>

@@ -8,6 +8,15 @@ class model_adm extends CI_Model
 		return $query;
 	}
 
+	public function delete_method($id_post)
+	{
+		# code...
+		return $this->db->delete('post_information', array('id_post' => $id_post));
+	}
+	public function update_method($id_post)
+	{
+		# code...
+	}
 
 	public function get_postingan()
 	{
