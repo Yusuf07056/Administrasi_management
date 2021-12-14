@@ -11,52 +11,31 @@
   		</li>
   		<li>
   			<a href="<?= base_url('index.php/Welcome/dashboard') ?>">
-  				<i class='bx bx-grid-alt'></i>
+  				<i class='bx bxs-dashboard bx-burst'></i>
   				<span class="links_name">Dashboard</span>
   			</a>
   			<span class="tooltip">Dashboard</span>
   		</li>
   		<li>
   			<a href="<?= base_url('index.php/Welcome/profil') ?>">
-  				<i class='bx bx-user'></i>
+  				<i class='bx bxs-user'></i>
   				<span class="links_name">User</span>
   			</a>
   			<span class="tooltip">User</span>
   		</li>
   		<li>
-  			<a href="<?= base_url('index.php/') ?>">
-  				<i class='bx bx-chat'></i>
-  				<span class="links_name">Messages</span>
-  			</a>
-  			<span class="tooltip">Messages</span>
-  		</li>
-  		<li>
   			<a href="<?= base_url('index.php/Welcome') ?>">
-  				<i class='bx bx-pie-chart-alt-2'></i>
-  				<span class="links_name">Analytics</span>
+  				<i class='bx bxs-data'></i>
+  				<span class="links_name">Data CV</span>
   			</a>
   			<span class="tooltip">Analytics</span>
   		</li>
   		<li>
   			<a href="<?= base_url('index.php/Welcome/create_post') ?>">
-  				<i class='bx bx-folder'></i>
-  				<span class="links_name">File Manager</span>
+  				<i class='bx bxs-file-plus'></i>
+  				<span class="links_name">Post Create</span>
   			</a>
   			<span class="tooltip">Files</span>
-  		</li>
-  		<li>
-  			<a href="<?= base_url('') ?>">
-  				<i class='bx bx-cart-alt'></i>
-  				<span class="links_name">Order</span>
-  			</a>
-  			<span class="tooltip">Order</span>
-  		</li>
-  		<li>
-  			<a href="<?= base_url('') ?>">
-  				<i class='bx bx-heart'></i>
-  				<span class="links_name">Saved</span>
-  			</a>
-  			<span class="tooltip">Saved</span>
   		</li>
   		<li>
   			<a href="<?= base_url('') ?>">

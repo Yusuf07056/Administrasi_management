@@ -7,6 +7,23 @@ class model_adm extends CI_Model
 		$query = $this->db->get('registrasi');
 		return $query;
 	}
+	public function get_post_select($id)
+	{
+		return $this->db->get_where('post_information', ['id_post' => $id]);
+	}
+
+	public function update_data($id)
+	{
+		# code...
+		$data = array(
+			'title' => 'My title',
+			'name'  => 'My Name',
+			'date'  => 'My date'
+		);
+
+		$this->db->where('id', $id);
+		$this->db->update('mytable', $data);
+	}
 
 	public function delete_method($id_post)
 	{

@@ -172,6 +172,11 @@ class Welcome extends CI_Controller
 		$this->model_adm->insert_postingan($judul_post, $isi_post, $status_post, $foto);
 		redirect(base_url('index.php/Welcome/create_post'));
 	}
+	public function update_page($id_post)
+	{
+		# code...
+		$edit_post[''] = $this->model_adm->update_data($id);
+	}
 	public function delete_post($id_post)
 	{
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {

@@ -7,7 +7,7 @@
 				<thead>
 					<tr>
 						<th>
-							<img src="<?= base_url('asset/image/kakkichan2.jpg') ?>" alt="" style="width:200px">
+							<img src="<?= base_url('asset/image/kakkichan2.jpg') ?>" alt="" style="width:100px; height: 100px;">
 						</th>
 
 					</tr>
