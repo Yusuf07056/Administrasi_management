@@ -154,6 +154,7 @@ class Welcome extends CI_Controller
 		$this->form_validation->set_rules('judul', 'Judul', 'required');
 		$this->form_validation->set_rules('isi', 'Isi', 'required');
 		$this->form_validation->set_rules('status', 'Status', 'required');
+		$this->form_validation->set_rules('keyword', 'Keyword', 'required');
 		$data['foto'] = '';
 		$foto = $_FILES['gambar']['name'];
 		$config['upload_path'] = './asset/image';
@@ -165,18 +166,54 @@ class Welcome extends CI_Controller
 		} else {
 			# code...
 			$judul_post = $this->input->post('judul');
+			$keyword = $this->input->post('keyword');
 			$isi_post = $this->input->post('isi');
 			$status_post = $this->input->post('status');
 			$foto = $this->upload->data('file_name');
 		}
-		$this->model_adm->insert_postingan($judul_post, $isi_post, $status_post, $foto);
+		$this->model_adm->insert_postingan($judul_post, $keyword, $isi_post, $status_post, $foto);
 		redirect(base_url('index.php/Welcome/create_post'));
 	}
 	public function update_page($id_post)
 	{
 		# code...
-		$edit_post[''] = $this->model_adm->update_data($id);
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$edit_post['post_information'] = $this->model_adm->get_post_select($id_post);
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->load->view('templates/Header');
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Update_body', $edit_post);
+			$this->load->view('templates/Footer');
+		}
 	}
+	public function insert_update()
+	{
+		# code...
+		$this->form_validation->set_rules('judul', 'Judul', 'required');
+		$this->form_validation->set_rules('isi', 'Isi', 'required');
+		$this->form_validation->set_rules('status', 'Status', 'required');
+		$this->form_validation->set_rules('keyword', 'Keyword', 'required');
+		$data['foto'] = '';
+		$foto = $_FILES['gambar']['name'];
+		$config['upload_path'] = './asset/image';
+		$config['allowed_types'] = 'jpg|png|jpeg';
+		$this->load->library('upload', $config);
+		if (!$this->upload->do_upload('gambar') || $this->form_validation->run() == false) {
+			# code...
+			echo "upload gagal";
+		} else {
+			# code...
+			$id = $this->input->post('id');
+			$judul_post = $this->input->post('judul');
+			$keyword = $this->input->post('keyword');
+			$isi_post = $this->input->post('isi');
+			$status_post = $this->input->post('status');
+			$foto = $this->upload->data('file_name');
+		}
+		$this->model_adm->update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto);
+		redirect(base_url('index.php/Welcome/create_post'));
+	}
+
 	public function delete_post($id_post)
 	{
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {

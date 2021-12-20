@@ -9,20 +9,22 @@ class model_adm extends CI_Model
 	}
 	public function get_post_select($id)
 	{
-		return $this->db->get_where('post_information', ['id_post' => $id]);
+		return $this->db->get_where('post_information', ['id_post' => $id])->result_array();
 	}
 
-	public function update_data($id)
+	public function update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto)
 	{
 		# code...
 		$data = array(
-			'title' => 'My title',
-			'name'  => 'My Name',
-			'date'  => 'My date'
+			'judul_post' => $judul_post,
+			'keyword' => $keyword,
+			'isi_post' => $isi_post,
+			'status_post' => $status_post,
+			'foto' => $foto
 		);
 
-		$this->db->where('id', $id);
-		$this->db->update('mytable', $data);
+		$this->db->where('id_post', $id);
+		$this->db->update('post_information', $data);
 	}
 
 	public function delete_method($id_post)
@@ -62,11 +64,12 @@ class model_adm extends CI_Model
 		$this->db->insert('registrasi', $data);
 	}
 
-	public function insert_postingan($judul_post, $isi_post, $status_post, $foto)
+	public function insert_postingan($judul_post, $keyword, $isi_post, $status_post, $foto)
 	{
 		# code...
 		$data = [
 			'judul_post' => $judul_post,
+			'keyword' => $keyword,
 			'isi_post' => $isi_post,
 			'status_post' => $status_post,
 			'foto' => $foto

@@ -44,6 +44,12 @@
 					</tr>
 					<tr>
 						<td>
+							<p>KEYWORD</p>
+							<input class="inp_design" type="text" placeholder="Keyword" id="keyword" name="keyword" required>
+						</td>
+					</tr>
+					<tr>
+						<td>
 							<p>ISI</p>
 							<textarea id="isi" name="isi" cols="30" rows="10" style="resize: none;" required></textarea>
 						</td>
@@ -89,7 +95,7 @@
 					<td><?= $post['id_post'] ?></td>
 					<td><?= $post['judul_post'] ?></td>
 					<td>
-						<a href="<?= base_url('index.php/Welcome/update_post/') . $post['id_post'] ?>"><i class='bx bx-edit' style='color:#022148'>EDIT</i></a>
+						<a href="<?= base_url('index.php/Welcome/update_page/') . $post['id_post'] ?>"><i class='bx bx-edit' style='color:#022148'>EDIT</i></a>
 
 						<a href="<?= base_url('index.php/Welcome/delete_post/') . $post['id_post'] ?>"><i class='bx bxs-message-square-x' style='color:#dd0404'>DELETE</i></a>
 					</td>

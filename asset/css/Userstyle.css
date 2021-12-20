@@ -15,6 +15,16 @@ body {
   background-color: #333;
 }
 
+#myInput {
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
 #navbar a {
   float: left;
   display: block;
@@ -145,5 +155,5 @@ only screen and (max-device-width : 320px){
  .galleryItem {width: 96%;}
  .galleryItem img {width: 96%;}
  .galleryItem h3 {font-size: 18px;}
- .galleryItem p, {font-size: 18px;}
+ .galleryItem p {font-size: 18px;}
 }
