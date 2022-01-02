@@ -1,4 +1,5 @@
 <div class="content">
+
 	<h2 style="text-align:center">User Profile Card</h2>
 
 	<div class="card">
@@ -10,13 +11,9 @@
 			<p class="title"><?= $profil['email'] ?></p>
 			<p>Harvard University</p>
 			<p><?= $profil['role_id'] ?></p>
+			<p><a href="<?= base_url('index.php/Kariyawan_ctrl/lihat_list_lamaran/') . $profil['id_registrasi'] ?>">LIST LAMARAN</a></p>
 		<?php endforeach; ?>
-		<div style="margin: 24px 0;">
-			<a href="#"><i class="fa fa-dribbble"></i></a>
-			<a href="#"><i class="fa fa-twitter"></i></a>
-			<a href="#"><i class="fa fa-linkedin"></i></a>
-			<a href="#"><i class="fa fa-facebook"></i></a>
-		</div>
+		<a href="<?= base_url('index.php/Welcome/logout') ?>"><i class="fa fa-sign-in"></i> Logout</a>
 		<p><button>edit</button></p>
 	</div>
 </div>

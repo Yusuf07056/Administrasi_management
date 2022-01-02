@@ -1,8 +1,7 @@
 <div class="container">
 	<div class="forms-container">
 		<div class="signin-signup">
-
-			<form action="<?= base_url('index.php/Kariyawan_ctrl/registrasi') ?>" method="post" class="sign-up-form">
+			<form action="<?= base_url('index.php/Welcome/registrasi') ?>" method="post" class="sign-up-form">
 
 				<h2 class="title">Sign up</h2>
 				<div class="input-field">
@@ -39,9 +38,9 @@
 				<small><?= form_error('gender'); ?></small>
 				<div class="input-field">
 					<i class="fas fa-user"></i>
-					<input type="text" placeholder="Age" name="umur" id="umur">
+					<input type="date" placeholder="Age" name="tgl_lahir" id="tgl_lahir">
 				</div>
-				<small><?= form_error('umur'); ?></small>
+				<small><?= form_error('tgl_lahir'); ?></small>
 				<!-- <div class="input-field">
 					<i class="fas fa-user"></i>
 					<label>
@@ -49,7 +48,7 @@
 						<input type="file" name="file_cv" id="file_cv">
 					</label>
 				</div> -->
-				<small><?= form_error('file'); ?></small>
+				<!-- <small><?= form_error('file'); ?></small> -->
 				<input type="submit" class="btn" value="Sign up" />
 
 			</form>
@@ -89,8 +88,8 @@
 					DAFTARKAN DIRIMU DAN LUAPKAN KREATIFITAS MU BERSAMA KAMI DI SINI!
 				</p>
 
-				<button class="btn transparent" id="sign-up-btn">
-					Sign up
+				<button class="btn transparent" id="sign-up-btn" onclick="first_show('utama')">
+					Daftar
 				</button>
 				<form action="<?= base_url('index.php/welcome/') ?>" method="post">
 					<button class="btn transparent" id="sign-up-btn">
@@ -109,7 +108,7 @@
 
 
 				<button class="btn transparent" id="sign-in-btn">
-					Sign in
+					Login
 				</button>
 
 			</div>

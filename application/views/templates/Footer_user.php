@@ -1,4 +1,5 @@
 <script>
+	document.getElementById("event").click();
 	window.onscroll = function() {
 		myFunction()
 	};

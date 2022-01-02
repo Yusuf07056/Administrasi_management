@@ -39,9 +39,9 @@ class Welcome extends CI_Controller
 			if ($role_id == 1) {
 				# code...
 				redirect(base_url('index.php/Welcome/dashboard'));
-			} elseif ($role_id == 2) {
+			} else {
 				# code...
-				redirect(base_url('index.php/Kariyawan_ctrl/feed_page'));
+				redirect(base_url('index.php/Kariyawan_ctrl/main_page'));
 			}
 		} elseif ($this->form_validation->run() == FALSE) {
 			# code...
@@ -67,6 +67,36 @@ class Welcome extends CI_Controller
 			redirect(base_url('index.php/Welcome/'));
 		}
 	}
+	public function desk_job()
+	{
+		$email = $this->session->userdata('email');
+		$data['registrasi'] = $this->model_adm->get_profil_adm($email);
+		$data['tb_jobdesk'] = $this->model_adm->get_jobdesk();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			$this->load->view('templates/Header');
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('jobdesk_create_body', $data);
+			$this->load->view('templates/Footer');
+		} elseif ($this->session->userdata('email') && $this->session->userdata('role_id')) {
+			# code...
+			redirect(base_url('index.php/Welcome/'));
+		}
+	}
+	public function input_jobdesk()
+	{
+		# code...
+		$this->form_validation->set_rules('jobdesk', 'Jobdesk', 'required', ['required' => 'harus di isi']);
+		$jobdesk = $this->input->post('jobdesk');
+
+		if ($this->form_validation->run() == FALSE && empty($this->session->userdata('email')) && empty($this->session->userdata('role_id'))) {
+			# code...
+			redirect(base_url('index.php/Welcome/logout'));
+		} else {
+			# code...
+			$this->model_adm->insert_jobdesk($jobdesk);
+			redirect(base_url('index.php/Welcome/desk_job'));
+		}
+	}
 	public function dashboard()
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
@@ -83,6 +113,8 @@ class Welcome extends CI_Controller
 	}
 	public function create_post()
 	{
+		$data_postingan['tb_perusahaan'] = $this->model_adm->get_company();
+		$data_postingan['tb_jobdesk'] = $this->model_adm->get_jobdesk();
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
@@ -90,6 +122,22 @@ class Welcome extends CI_Controller
 			$this->load->view('templates/Header');
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Create_post_body', $data_postingan);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
+		}
+	}
+	public function list_job_appointment()
+	{
+		$data['join_appointment'] = $this->model_adm->join_appointment_by();
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			# code...
+			$this->load->view('templates/Header');
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('lamaran_list_adm', $data);
 			$this->load->view('templates/Footer');
 		} else {
 			# code...
@@ -118,7 +166,7 @@ class Welcome extends CI_Controller
 		$this->form_validation->set_rules('password2', 'password', 'required|trim|matches[password1]', ['required' => 'password harus di isi']);
 		$this->form_validation->set_rules('no_telp', 'phone number', 'required|trim', ['required' => 'nomer telepon harus di isi']);
 		$this->form_validation->set_rules('gender', 'gender', 'required|trim', ['required' => 'gender harus di pilih']);
-		$this->form_validation->set_rules('umur', 'umur', 'required|trim', ['required' => 'umur harus di isi']);
+		$this->form_validation->set_rules('tgl_lahir', 'tanggal lahir', 'required|trim', ['required' => 'tanggal lahir harus di isi']);
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->load->view('templates/Header_LG');
@@ -130,8 +178,8 @@ class Welcome extends CI_Controller
 			$password = $this->input->post('password1');
 			$no_telp = $this->input->post('no_telp');
 			$gender = $this->input->post('gender');
-			$umur = $this->input->post('umur');
-			$this->model_adm->insert_registrasi($user, $email, $password, $no_telp, $gender, $umur);
+			$tgl_lahir = $this->input->post('tgl_lahir');
+			$this->model_adm->insert_registrasi($user, $email, $password, $no_telp, $gender, $tgl_lahir);
 			redirect(base_url('index.php/Welcome'));
 		}
 	}
@@ -151,9 +199,9 @@ class Welcome extends CI_Controller
 	public function input_post()
 	{
 
-		$this->form_validation->set_rules('judul', 'Judul', 'required');
-		$this->form_validation->set_rules('isi', 'Isi', 'required');
-		$this->form_validation->set_rules('status', 'Status', 'required');
+		$this->form_validation->set_rules('judul', 'Judul post', 'required');
+		$this->form_validation->set_rules('isi', 'Isi post', 'required');
+		$this->form_validation->set_rules('status', 'Status post', 'required');
 		$this->form_validation->set_rules('keyword', 'Keyword', 'required');
 		$data['foto'] = '';
 		$foto = $_FILES['gambar']['name'];
@@ -161,18 +209,19 @@ class Welcome extends CI_Controller
 		$config['allowed_types'] = 'jpg|png|jpeg';
 		$this->load->library('upload', $config);
 		if (!$this->upload->do_upload('gambar') || $this->form_validation->run() == false) {
-			# code...
-			echo "upload gagal";
+			$error = array('error' => $this->upload->display_errors());
+			echo "<div>" . $error['error'] . "</div>";
 		} else {
-			# code...
 			$judul_post = $this->input->post('judul');
 			$keyword = $this->input->post('keyword');
 			$isi_post = $this->input->post('isi');
 			$status_post = $this->input->post('status');
 			$foto = $this->upload->data('file_name');
+			$company_id = $this->input->post('company_id');
+			$jobdesk = $this->input->post('jobdesk');
+			$this->model_adm->insert_postingan($judul_post, $keyword, $isi_post, $status_post, $foto, $company_id, $jobdesk);
+			redirect(base_url('index.php/Welcome/create_post'));
 		}
-		$this->model_adm->insert_postingan($judul_post, $keyword, $isi_post, $status_post, $foto);
-		redirect(base_url('index.php/Welcome/create_post'));
 	}
 	public function update_page($id_post)
 	{
@@ -186,6 +235,7 @@ class Welcome extends CI_Controller
 			$this->load->view('templates/Footer');
 		}
 	}
+
 	public function insert_update()
 	{
 		# code...
@@ -218,6 +268,15 @@ class Welcome extends CI_Controller
 	{
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
 			$this->model_adm->delete_method($id_post);
+			redirect(base_url('index.php/Welcome/create_post'));
+		} else {
+			$this->logout();
+		}
+	}
+	public function delete_jobdesk($id)
+	{
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->model_adm->delete_jobdesk_method($id);
 			redirect(base_url('index.php/Welcome/create_post'));
 		} else {
 			$this->logout();

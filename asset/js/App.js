@@ -1,7 +1,9 @@
 const sign_in_btn = document.querySelector("#sign-in-btn");
 const sign_up_btn = document.querySelector("#sign-up-btn");
 const container = document.querySelector(".container");
-
+function first_show(Btnname) {
+	document.getElementById(Btnname).click();
+}
 sign_up_btn.addEventListener("click", () => {
 	container.classList.add("sign-up-mode");
 });

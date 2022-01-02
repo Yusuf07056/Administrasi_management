@@ -707,9 +707,9 @@ form .user-details .input-box{
 	outline: none;
 }
 .inp_box{
-	font-size: 19px;
+	font-size: 18px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	background:#1d1b31;
-	border-radius: 30px;
 	border:none;
 	color: white;
 }
