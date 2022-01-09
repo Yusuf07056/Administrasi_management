@@ -66,6 +66,10 @@ class model_adm extends CI_Model
 	{
 		return $this->db->get_where('registrasi', ['email' => $email]);
 	}
+	public function get_job_appointment($id_regis)
+	{
+		return $this->db->get_where('job_appointment', ['id_regis' => $id_regis]);
+	}
 
 	public function insert_registrasi($user, $email, $password, $no_telp, $gender, $tgl_lahir)
 	{
@@ -153,9 +157,39 @@ class model_adm extends CI_Model
 	public function join_appointment_by()
 	{
 		# code...
-		$this->db->select('job_appointment.id_pelamar, registrasi.user_name, registrasi.id_registrasi, job_appointment.job_desk, tb_perusahaan.nama_perusahaan, job_appointment.porto');
+		$this->db->select('job_appointment.id_pelamar, registrasi.user_name, registrasi.id_registrasi, job_appointment.job_desk, tb_perusahaan.nama_perusahaan, tb_perusahaan.id_perusahaan, job_appointment.porto');
 		$this->db->from('job_appointment')->join('registrasi', 'job_appointment.id_regis = registrasi.id_registrasi');
 		$this->db->join('tb_perusahaan', 'job_appointment.perusahaan_id = tb_perusahaan.id_perusahaan');
+		return $this->db->get()->result_array();
+	}
+	public function insert_verifikasi($id_registrasi, $id_pelamar, $id_perusahaan, $status)
+	{
+		# code...
+		$data = [
+			'id_regis' => $id_registrasi,
+			'id_lamaran' => $id_pelamar,
+			'id_perusahaan' => $id_perusahaan,
+			'status' => $status,
+		];
+		$this->db->insert('verifikasi_lamaran', $data);
+	}
+	public function join_verifikasi_by($id_regis)
+	{
+		# code...
+		$this->db->select('verifikasi_lamaran.id_verifikasi,registrasi.user_name,registrasi.id_registrasi,tb_perusahaan.id_perusahaan,tb_perusahaan.nama_perusahaan,job_appointment.job_desk,verifikasi_lamaran.status');
+		$this->db->from('verifikasi_lamaran')->join('registrasi', 'registrasi.id_registrasi = verifikasi_lamaran.id_regis');
+		$this->db->join('job_appointment', 'ob_appointment.id_pelamar = verifikasi_lamaran.id_lamaran');
+		$this->db->join('tb_perusahaan', 'tb_perusahaan.id_perusahaan = verifikasi_lamaran.id_perusahaan');
+		$this->db->where('registrasi.id_registrasi', $id_regis);
+		return $this->db->get()->result_array();
+	}
+	public function join_verifikasi()
+	{
+		# code...
+		$this->db->select('verifikasi_lamaran.id_verifikasi,registrasi.user_name,registrasi.id_registrasi,tb_perusahaan.id_perusahaan,tb_perusahaan.nama_perusahaan,job_appointment.job_desk,verifikasi_lamaran.status');
+		$this->db->from('verifikasi_lamaran')->join('registrasi', 'registrasi.id_registrasi = verifikasi_lamaran.id_regis');
+		$this->db->join('job_appointment', 'job_appointment.id_pelamar = verifikasi_lamaran.id_lamaran');
+		$this->db->join('tb_perusahaan', 'tb_perusahaan.id_perusahaan = verifikasi_lamaran.id_perusahaan');
 		return $this->db->get()->result_array();
 	}
 }

@@ -131,6 +131,7 @@ class Welcome extends CI_Controller
 	public function list_job_appointment()
 	{
 		$data['join_appointment'] = $this->model_adm->join_appointment_by();
+		$data['join_verifikasi'] = $this->model_adm->join_verifikasi();
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
@@ -142,6 +143,27 @@ class Welcome extends CI_Controller
 		} else {
 			# code...
 			redirect(base_url('index.php/Welcome'));
+		}
+	}
+
+	public function konfirmasi_lamaran()
+	{
+		# code...
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			# code...
+			$id_pelamar = $this->input->post('id_pelamar');
+			$id_registrasi = $this->input->post('id_registrasi');
+			$id_perusahaan = $this->input->post('id_perusahaan');
+			$status = $this->input->post('status');
+			$this->model_adm->insert_verifikasi($id_registrasi, $id_pelamar, $id_perusahaan, $status);
+			redirect(base_url('index.php/Welcome/list_job_appointment'));
+		} else {
+			# code...
+			$error = array('error' => $this->upload->display_errors());
+			echo "<div>" . $error['error'] . "</div>";
+			// redirect(base_url('index.php/Welcome'));
 		}
 	}
 
@@ -282,4 +304,5 @@ class Welcome extends CI_Controller
 			$this->logout();
 		}
 	}
+
 }

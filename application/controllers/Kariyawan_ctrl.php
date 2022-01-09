@@ -6,6 +6,7 @@ class Kariyawan_ctrl extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('model_kariyawan');
+		$this->load->library('Pdf_report');
 	}
 	public function index()
 	{
@@ -172,6 +173,7 @@ class Kariyawan_ctrl extends CI_Controller
 	{
 		# code...
 		$data['join_appointment'] = $this->model_kariyawan->join_appointment_by($id_registrasi);
+		$data['join_verifikasi'] = $this->model_kariyawan->join_verifikasi_by($id_registrasi);
 		$title['title'] = 'HISTORY';
 		if ($this->session->userdata('email') && $this->session->userdata('role_id')) {
 			$this->load->view('templates/Header_user', $title);
@@ -203,5 +205,10 @@ class Kariyawan_ctrl extends CI_Controller
 			# code...
 			redirect(base_url('index.php/Welcome/'));
 		}
+	}
+	function pdf_generate($id_registrasi)
+	{
+		$data['join_verifikasi'] = $this->model_kariyawan->join_verifikasi_by($id_registrasi);
+		$this->load->view('PDF_PRINT', $data);
 	}
 }

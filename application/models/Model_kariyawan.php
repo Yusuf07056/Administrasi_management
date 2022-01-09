@@ -117,4 +117,14 @@ class model_kariyawan extends CI_Model
 		$this->db->where('registrasi.id_registrasi', $id_regis);
 		return $this->db->get()->result_array();
 	}
+	public function join_verifikasi_by($id_regis)
+	{
+		# code...
+		$this->db->select('verifikasi_lamaran.id_verifikasi,registrasi.user_name,registrasi.id_registrasi,registrasi.email,registrasi.gender,registrasi.tgl_lahir,registrasi.no_telp,tb_perusahaan.id_perusahaan,tb_perusahaan.nama_perusahaan,job_appointment.job_desk,verifikasi_lamaran.status');
+		$this->db->from('verifikasi_lamaran')->join('registrasi', 'registrasi.id_registrasi = verifikasi_lamaran.id_regis');
+		$this->db->join('job_appointment', 'job_appointment.id_pelamar = verifikasi_lamaran.id_lamaran');
+		$this->db->join('tb_perusahaan', 'tb_perusahaan.id_perusahaan = verifikasi_lamaran.id_perusahaan');
+		$this->db->where('registrasi.id_registrasi', $id_regis);
+		return $this->db->get()->result_array();
+	}
 }

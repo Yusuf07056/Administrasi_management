@@ -6,7 +6,7 @@
 		<?php
 		foreach ($registrasi->result_array() as $profil) :
 		?>
-			<img src="<?= base_url('asset/image/kakkichan2.jpg') ?>" alt="John" style="width:100%">
+			<img src="<?= base_url('asset/image/user.jpg') ?>" style="width:100%">
 			<h1><?= $profil['user_name'] ?></h1>
 			<p class="title"><?= $profil['email'] ?></p>
 			<p>Harvard University</p>
