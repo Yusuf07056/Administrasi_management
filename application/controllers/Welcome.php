@@ -305,4 +305,14 @@ class Welcome extends CI_Controller
 		}
 	}
 
+	public function delete_verifikasi_data_pelamar($id)
+	{
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->model_adm->delete_verfikasi_pelamar($id);
+			redirect(base_url('index.php/Welcome/list_job_appointment'));
+		} else {
+			$this->logout();
+		}
+	}
+
 }

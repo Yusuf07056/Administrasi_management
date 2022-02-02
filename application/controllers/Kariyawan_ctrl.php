@@ -55,7 +55,7 @@ class Kariyawan_ctrl extends CI_Controller
 	}
 	public function registrasi()
 	{
-		# code...
+		// # code...
 		$this->form_validation->set_rules('user_name', 'User name', 'trim|required', ['required' => 'User name harus di isi']);
 		$this->form_validation->set_rules(
 			'email',
@@ -90,6 +90,15 @@ class Kariyawan_ctrl extends CI_Controller
 			$this->model_kariyawan->insert_registrasi($user, $email, $password, $no_telp, $gender, $tgl_lahir);
 			redirect(base_url('index.php/Welcome'));
 		}
+		// for ($i = 1; $i <= 10; $i++) {
+		// 	$user = ['ihsan' . $i, true];
+		// 	$email = ['ihsan' . $i . '@gmail.com', true];
+		// 	$password = ['password12' . $i];
+		// 	$no_telp = '081221122112';
+		// 	$gender = 'MALE';
+		// 	$tgl_lahir = '2000-03-18';
+		// 	$this->model_kariyawan->insert_registrasi($user, $email, $password, $no_telp, $gender, $tgl_lahir);
+		// }
 	}
 
 	public function post_lamaran()

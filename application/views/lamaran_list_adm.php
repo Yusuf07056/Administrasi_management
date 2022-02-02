@@ -28,11 +28,6 @@
 						<td>
 							<input type="submit" value="VERIFIKASI">
 					</form>
-					||
-					<a href="<?= base_url('') . $job['id_registrasi'] ?>">UPDATE</a>
-					||
-					<a href="<?= base_url('') . $job['id_registrasi'] ?>">DELETE</a>
-					||
 					<a href="<?= base_url('index.php/Kariyawan_ctrl/unduh_file/') . $job['porto'] ?>">DOWNLOAD</a>
 					</td>
 				</tr>
@@ -58,7 +53,7 @@
 					<td><?= $verifikasi['job_desk']; ?></td>
 					<td><?= $verifikasi['nama_perusahaan']; ?></td>
 					<td>
-						<a href="<?= base_url('') . $verifikasi['id_registrasi'] ?>">UPDATE</a>
+						<a href="<?= base_url('index.php/Welcome/delete_verifikasi_data_pelamar/') . $verifikasi['id_verifikasi'] ?>">UPDATE</a>
 						||
 						<a href="<?= base_url('') . $verifikasi['id_registrasi'] ?>">DELETE</a>
 					</td>

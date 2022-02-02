@@ -51,6 +51,11 @@ class model_adm extends CI_Model
 		# code...
 		return $this->db->delete('tb_jobdesk', array('id' => $id));
 	}
+	public function delete_verfikasi_pelamar($id)
+	{
+		# code...
+		return $this->db->delete('verifikasi_lamaran', array('id_verifikasi' => $id));
+	}
 	public function update_method($id_post)
 	{
 		# code...
