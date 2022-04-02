@@ -1,6 +1,5 @@
 <?php 
 
-
 class Ctrl_company extends CI_Controller
 {
 
