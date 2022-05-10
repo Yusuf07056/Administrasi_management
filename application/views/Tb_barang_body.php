@@ -20,6 +20,7 @@
 									<th>Jenis barang</th>
 									<th>Jumlah</th>
 									<th>Harga</th>
+									<th>action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -29,38 +30,10 @@
 										<td><?= $barang_view['jenis'] ?></td>
 										<td><?= $barang_view['jumlah'] ?></td>
 										<td><?= $barang_view['harga'] ?></td>
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="card mb-4">
-					<div class="card-header">
-						<i class="fas fa-table me-1"></i>
-						TABEL BARANG
-					</div>
-					<div class="card-body">
-						<table class="dataTable-table" id="datatablesSimple">
-							<thead>
-								<tr>
-									<th>Username</th>
-									<th>Email</th>
-									<th>Nomor telfon</th>
-									<th>Gender</th>
-									<th>Tanggal lahir</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php
-								$view_akun = $registrasi->result_array();
-								foreach ($view_akun as $reg_view) : ?>
-									<tr>
-										<td><?= $reg_view['user_name'] ?></td>
-										<td><?= $reg_view['email'] ?></td>
-										<td><?= $reg_view['no_telp'] ?></td>
-										<td><?= $reg_view['gender'] ?></td>
-										<td><?= $reg_view['tgl_lahir'] ?></td>
+										<td>
+											<a href="<?= base_url('index.php/Welcome/delete_barang/') . $barang_view['nama_barang'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
+											<a href="<?= base_url('index.php/Welcome/update_barang/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+										</td>
 									</tr>
 								<?php endforeach; ?>
 							</tbody>

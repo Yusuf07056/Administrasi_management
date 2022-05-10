@@ -7,9 +7,9 @@ class model_adm extends CI_Model
 		$query = $this->db->get('registrasi');
 		return $query;
 	}
-	public function get_post_select($id)
+	public function get_barang_select($id)
 	{
-		return $this->db->get_where('post_information', ['id_post' => $id])->result_array();
+		return $this->db->get_where('tb_barang', ['id_barang' => $id])->result_array();
 	}
 
 	public function update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto)
@@ -25,6 +25,19 @@ class model_adm extends CI_Model
 
 		$this->db->where('id_post', $id);
 		$this->db->update('post_information', $data);
+	}
+	public function update_data_barang($id_barang, $nama_barang, $jenis, $jumlah, $harga)
+	{
+		# code...
+		$data = array(
+			'nama_barang' => $nama_barang,
+			'jenis' => $jenis,
+			'jumlah' => $jumlah,
+			'harga' => $harga
+		);
+
+		$this->db->where('id_barang', $id_barang);
+		$this->db->update('tb_barang', $data);
 	}
 	public function get_company()
 	{
@@ -51,6 +64,11 @@ class model_adm extends CI_Model
 		# code...
 		return $this->db->delete('tb_jobdesk', array('id' => $id));
 	}
+	public function delete_tb_barang($nama)
+	{
+		# code...
+		return $this->db->delete('tb_barang', array('nama_barang' => $nama));
+	}
 	public function delete_verfikasi_pelamar($id)
 	{
 		# code...
@@ -70,6 +88,10 @@ class model_adm extends CI_Model
 	public function get_profil_adm($email)
 	{
 		return $this->db->get_where('registrasi', ['email' => $email]);
+	}
+	public function get_profil_all()
+	{
+		return $this->db->get('registrasi')->result_array();
 	}
 	public function get_job_appointment($id_regis)
 	{
@@ -99,20 +121,22 @@ class model_adm extends CI_Model
 		];
 		$this->db->insert('tb_jobdesk', $data);
 	}
+	public function table_barang_view()
+	{
+		# code...
+		return $this->db->get('tb_barang')->result_array();
+	}
 
-	public function insert_postingan($judul_post, $keyword, $isi_post, $status_post, $foto, $company_id, $jobdesk)
+	public function insert_postingan($nama_barang, $jenis, $jumlah, $harga)
 	{
 		# code...
 		$data = [
-			'judul_post' => $judul_post,
-			'keyword' => $keyword,
-			'isi_post' => $isi_post,
-			'status_post' => $status_post,
-			'foto' => $foto,
-			'company_id' => $company_id,
-			'jobdesk' => $jobdesk
+			'nama_barang' => $nama_barang,
+			'jenis' => $jenis,
+			'jumlah' => $jumlah,
+			'harga' => $harga
 		];
-		$this->db->insert('post_information', $data);
+		$this->db->insert('tb_barang', $data);
 	}
 
 	public function input_appointment($id_regis, $company_id, $jobdesk, $portofolio)
@@ -138,6 +162,7 @@ class model_adm extends CI_Model
 				$data = [
 					'email' => $registrasi['email'],
 					'role_id' => $registrasi['role_id'],
+					'user_name' => $registrasi['user_name'],
 				];
 
 				$this->session->set_userdata($data);

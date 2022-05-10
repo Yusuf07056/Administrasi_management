@@ -26,6 +26,7 @@ class Welcome extends CI_Controller
 	}
 	public function index()
 	{
+		$title['title'] = 'LOGIN';
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email', [
 			'required' => 'email required'
@@ -45,7 +46,7 @@ class Welcome extends CI_Controller
 			}
 		} elseif ($this->form_validation->run() == FALSE) {
 			# code...
-			$this->load->view('templates/Header_LG');
+			$this->load->view('templates/Header_LG', $title);
 			$this->load->view('Login_body');
 			$this->load->view('templates/Footer_LG');
 		} else {
@@ -100,33 +101,41 @@ class Welcome extends CI_Controller
 	public function dashboard()
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['registrasi'] = $this->model_adm->get_registrasi();
+		$data['tb_barang'] = $this->model_adm->table_barang_view();
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
 			# code...
-			$this->load->view('templates/Header');
+			$title['title'] = 'DASHBOARD';
+			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
-			$this->load->view('Dashboard_body');
+			$this->load->view('Dashboard_body', $data);
 			$this->load->view('templates/Footer');
 		} else {
 			# code...
 			redirect(base_url('index.php/Welcome'));
 		}
 	}
-	public function create_post()
+	public function create_barang()
 	{
-		$data_postingan['tb_perusahaan'] = $this->model_adm->get_company();
-		$data_postingan['tb_jobdesk'] = $this->model_adm->get_jobdesk();
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
+		$data['tb_barang'] = $this->model_adm->table_barang_view();
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
 			# code...
-			$this->load->view('templates/Header');
+			$title['title'] = 'INPUT BARANG';
+			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
-			$this->load->view('Create_post_body', $data_postingan);
+			$this->load->view('Form_inputBarang_body', $data);
 			$this->load->view('templates/Footer');
 		} else {
 			# code...
 			redirect(base_url('index.php/Welcome'));
 		}
+	}
+	public function delete_barang($nama)
+	{
+		# code...
+		$this->model_adm->delete_tb_barang($nama);
+		redirect(base_url('index.php/Welcome'));
 	}
 	public function list_job_appointment()
 	{
@@ -165,6 +174,14 @@ class Welcome extends CI_Controller
 			echo "<div>" . $error['error'] . "</div>";
 			// redirect(base_url('index.php/Welcome'));
 		}
+	}
+
+	public function page_registration()
+	{
+		# code...
+		$this->load->view('templates/Header_LG');
+		$this->load->view('Register_body');
+		$this->load->view('templates/Footer_LG');
 	}
 
 	public function registrasi()
@@ -218,59 +235,65 @@ class Welcome extends CI_Controller
 		$this->session->unset_userdata('role_id');
 		redirect(base_url('index.php/Welcome'));
 	}
-	public function input_post()
+	public function input_barang()
 	{
 
-		$this->form_validation->set_rules('judul', 'Judul post', 'required');
-		$this->form_validation->set_rules('isi', 'Isi post', 'required');
-		$this->form_validation->set_rules('status', 'Status post', 'required');
-		$this->form_validation->set_rules('keyword', 'Keyword', 'required');
-		$data['foto'] = '';
-		$foto = $_FILES['gambar']['name'];
-		$config['upload_path'] = './asset/image';
-		$config['allowed_types'] = 'jpg|png|jpeg';
-		$this->load->library('upload', $config);
-		if (!$this->upload->do_upload('gambar') || $this->form_validation->run() == false) {
-			$error = array('error' => $this->upload->display_errors());
-			echo "<div>" . $error['error'] . "</div>";
+		$this->form_validation->set_rules('nama_barang', 'NAMA BARANG', 'required');
+		$this->form_validation->set_rules('jenis', 'JENIS BARANG', 'required');
+		$this->form_validation->set_rules('jumlah', 'JUMLAH BARANG', 'required');
+		$this->form_validation->set_rules('harga', 'HARGA BARANG', 'required');
+		if ($this->form_validation->run() == false) {
+			$error['errors'] = 'input ulang';
+			echo "<div>" . $error . "</div>";
 		} else {
-			$judul_post = $this->input->post('judul');
-			$keyword = $this->input->post('keyword');
-			$isi_post = $this->input->post('isi');
-			$status_post = $this->input->post('status');
-			$foto = $this->upload->data('file_name');
-			$company_id = $this->input->post('company_id');
-			$jobdesk = $this->input->post('jobdesk');
-			$this->model_adm->insert_postingan($judul_post, $keyword, $isi_post, $status_post, $foto, $company_id, $jobdesk);
-			redirect(base_url('index.php/Welcome/create_post'));
+			$nama_barang = $this->input->post('nama_barang');
+			$jenis = $this->input->post('jenis');
+			$jumlah = $this->input->post('jumlah');
+			$harga = $this->input->post('harga');
+			$this->model_adm->insert_postingan($nama_barang, $jenis, $jumlah, $harga);
+			redirect(base_url('index.php/Welcome/tb_barang_page'));
 		}
 	}
-	public function update_page($id_post)
+	public function update_barang($id_barang)
 	{
 		# code...
+		$title['title'] = 'update';
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		$edit_post['post_information'] = $this->model_adm->get_post_select($id_post);
+		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
-			$this->load->view('templates/Header');
+			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
-			$this->load->view('Update_body', $edit_post);
+			$this->load->view('Update_body', $data);
 			$this->load->view('templates/Footer');
+		}
+	}
+
+	public function tb_barang_page()
+	{
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_barang'] = $this->model_adm->table_barang_view();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			# code...
+			$title['title'] = 'data barang';
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Tb_barang_body', $data);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
 		}
 	}
 
 	public function insert_update()
 	{
 		# code...
-		$this->form_validation->set_rules('judul', 'Judul', 'required');
-		$this->form_validation->set_rules('isi', 'Isi', 'required');
-		$this->form_validation->set_rules('status', 'Status', 'required');
-		$this->form_validation->set_rules('keyword', 'Keyword', 'required');
-		$data['foto'] = '';
-		$foto = $_FILES['gambar']['name'];
-		$config['upload_path'] = './asset/image';
-		$config['allowed_types'] = 'jpg|png|jpeg';
-		$this->load->library('upload', $config);
-		if (!$this->upload->do_upload('gambar') || $this->form_validation->run() == false) {
+		$this->form_validation->set_rules('nama_barang', 'Nama barang', 'required');
+		$this->form_validation->set_rules('jenis', 'Jenis', 'required');
+		$this->form_validation->set_rules('jumlah', 'Jumlah', 'required');
+		$this->form_validation->set_rules('harga', 'Harga', 'required');
+
+		if ($this->form_validation->run() == false) {
 			# code...
 			echo "upload gagal";
 		} else {
@@ -314,5 +337,4 @@ class Welcome extends CI_Controller
 			$this->logout();
 		}
 	}
-
 }
