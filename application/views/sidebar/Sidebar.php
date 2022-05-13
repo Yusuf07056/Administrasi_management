@@ -49,6 +49,7 @@
 								<a class="nav-link" href="<?= base_url('') ?>">tabel barang masuk</a>
 								<a class="nav-link" href="<?= base_url('') ?>">tabel barang keluar</a>
 								<a class="nav-link" href="<?= base_url('index.php/welcome/tb_barang_page') ?>">tabel barang</a>
+								<a class="nav-link" href="<?= base_url('index.php/welcome/supplier_page_') ?>">tabel supplier</a>
 							</nav>
 						</div>
 						<div class="sb-sidenav-menu-heading">LAMAN</div>

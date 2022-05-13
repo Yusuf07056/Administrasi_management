@@ -30,6 +30,7 @@ class model_adm extends CI_Model
 		$this->db->where('id_post', $id);
 		$this->db->update('post_information', $data);
 	}
+
 	public function update_data_barang($id_barang, $nama_barang, $jenis, $jumlah, $harga)
 	{
 		# code...
@@ -67,10 +68,10 @@ class model_adm extends CI_Model
 		# code...
 		return $this->db->get('tb_jobdesk')->result_array();
 	}
-	public function delete_method($id_post)
+	public function delete_supplier($id_supplier)
 	{
 		# code...
-		return $this->db->delete('post_information', array('id_post' => $id_post));
+		return $this->db->delete('tb_supplier', array('id_supplier' => $id_supplier));
 	}
 	public function get_jobappointmet()
 	{
@@ -155,6 +156,16 @@ class model_adm extends CI_Model
 			'harga' => $harga
 		];
 		$this->db->insert('tb_barang', $data);
+	}
+	public function insert_supplier($nama_supplier, $no_telp, $alamat)
+	{
+		# code...
+		$data = [
+			'nama_supplier' => $nama_supplier,
+			'no_telp' => $no_telp,
+			'alamat' => $alamat
+		];
+		$this->db->insert('tb_supplier', $data);
 	}
 	public function insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk)
 	{

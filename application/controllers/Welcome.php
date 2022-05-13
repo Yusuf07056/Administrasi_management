@@ -298,6 +298,22 @@ class Welcome extends CI_Controller
 			redirect(base_url('index.php/Welcome'));
 		}
 	}
+	public function supplier_page_()
+	{
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_supplier'] = $this->model_adm->get_supplier();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			# code...
+			$title['title'] = 'supplier';
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Supplier_page_body', $data);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
+		}
+	}
 
 	public function insert_update()
 	{
@@ -320,8 +336,26 @@ class Welcome extends CI_Controller
 			$harga = $this->input->post('harga');
 		}
 		$this->model_adm->update_data_barang($id_barang, $nama_barang, $jenis, $jumlah, $harga);
-		$this->model_adm->update_data_barang_by($id_barang, $jumlah);
 		redirect(base_url('index.php/Welcome/'));
+	}
+	public function insert_supplier()
+	{
+		# code...
+		$this->form_validation->set_rules('nama_supplier', 'nama barang', 'required');
+		$this->form_validation->set_rules('no_telp', 'Jenis', 'required');
+		$this->form_validation->set_rules('alamat', 'Jumlah', 'required');
+
+		if ($this->form_validation->run() == false) {
+			# code...
+			echo "upload gagal";
+		} else {
+			# code...
+			$nama_supplier = $this->input->post('nama_supplier');
+			$no_telp = $this->input->post('no_telp');
+			$alamat = $this->input->post('alamat');
+		}
+		$this->model_adm->insert_supplier($nama_supplier, $no_telp, $alamat);
+		redirect(base_url('index.php/Welcome/supplier_page_'));
 	}
 	public function insert_barang_in()
 	{
@@ -352,6 +386,15 @@ class Welcome extends CI_Controller
 	{
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
 			$this->model_adm->delete_method($id_post);
+			redirect(base_url('index.php/Welcome/create_post'));
+		} else {
+			$this->logout();
+		}
+	}
+	public function delete_supplier($id_supplier)
+	{
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->model_adm->delete_supplier($id_supplier);
 			redirect(base_url('index.php/Welcome/create_post'));
 		} else {
 			$this->logout();
