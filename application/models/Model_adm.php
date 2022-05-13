@@ -11,6 +11,10 @@ class model_adm extends CI_Model
 	{
 		return $this->db->get_where('tb_barang', ['id_barang' => $id])->result_array();
 	}
+	public function get_supplier()
+	{
+		return $this->db->get('tb_supplier')->result_array();
+	}
 
 	public function update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto)
 	{
@@ -38,6 +42,20 @@ class model_adm extends CI_Model
 
 		$this->db->where('id_barang', $id_barang);
 		$this->db->update('tb_barang', $data);
+	}
+	public function update_data_barang_by($id_barang, $jumlah)
+	{
+		# code...
+		$data = array(
+			'jumlah' => $jumlah
+		);
+
+		$this->db->where('id_barang', $id_barang);
+		$this->db->update('tb_barang', $data);
+	}
+	public function cetak_data()
+	{
+		# code...
 	}
 	public function get_company()
 	{
@@ -127,7 +145,7 @@ class model_adm extends CI_Model
 		return $this->db->get('tb_barang')->result_array();
 	}
 
-	public function insert_postingan($nama_barang, $jenis, $jumlah, $harga)
+	public function insert_barang($nama_barang, $jenis, $jumlah, $harga)
 	{
 		# code...
 		$data = [
@@ -138,17 +156,16 @@ class model_adm extends CI_Model
 		];
 		$this->db->insert('tb_barang', $data);
 	}
-
-	public function input_appointment($id_regis, $company_id, $jobdesk, $portofolio)
+	public function insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk)
 	{
 		# code...
 		$data = [
-			'id_regis' => $id_regis,
-			'company_id' => $company_id,
-			'job_desk' => $jobdesk,
-			'portofolio' => $portofolio
+			'id_barang' => $id_barang,
+			'id_supplier' => $id_supplier,
+			'detail_tanggal_masuk' => $detail_tanggal_masuk,
+			'jumlah_masuk' => $jumlah_masuk
 		];
-		$this->db->insert('job_appointment', $data);
+		$this->db->insert('tb_barang_masuk', $data);
 	}
 
 	public function cek_email($email, $password)

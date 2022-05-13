@@ -240,7 +240,6 @@ class Welcome extends CI_Controller
 
 		$this->form_validation->set_rules('nama_barang', 'NAMA BARANG', 'required');
 		$this->form_validation->set_rules('jenis', 'JENIS BARANG', 'required');
-		$this->form_validation->set_rules('jumlah', 'JUMLAH BARANG', 'required');
 		$this->form_validation->set_rules('harga', 'HARGA BARANG', 'required');
 		if ($this->form_validation->run() == false) {
 			$error['errors'] = 'input ulang';
@@ -248,9 +247,9 @@ class Welcome extends CI_Controller
 		} else {
 			$nama_barang = $this->input->post('nama_barang');
 			$jenis = $this->input->post('jenis');
-			$jumlah = $this->input->post('jumlah');
+			$jumlah = 0;
 			$harga = $this->input->post('harga');
-			$this->model_adm->insert_postingan($nama_barang, $jenis, $jumlah, $harga);
+			$this->model_adm->insert_barang($nama_barang, $jenis, $jumlah, $harga);
 			redirect(base_url('index.php/Welcome/tb_barang_page'));
 		}
 	}
@@ -264,6 +263,21 @@ class Welcome extends CI_Controller
 			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Update_body', $data);
+			$this->load->view('templates/Footer');
+		}
+	}
+
+	public function input_barang_masuk($id_barang)
+	{
+		# code...
+		$title['title'] = 'barang masuk';
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
+		$data['tb_supplier'] = $this->model_adm->get_supplier();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Barangmasuk_body', $data);
 			$this->load->view('templates/Footer');
 		}
 	}
@@ -288,7 +302,8 @@ class Welcome extends CI_Controller
 	public function insert_update()
 	{
 		# code...
-		$this->form_validation->set_rules('nama_barang', 'Nama barang', 'required');
+		$this->form_validation->set_rules('id_barang', 'id barang', 'required');
+		$this->form_validation->set_rules('nama_barang', 'nama barang', 'required');
 		$this->form_validation->set_rules('jenis', 'Jenis', 'required');
 		$this->form_validation->set_rules('jumlah', 'Jumlah', 'required');
 		$this->form_validation->set_rules('harga', 'Harga', 'required');
@@ -298,15 +313,39 @@ class Welcome extends CI_Controller
 			echo "upload gagal";
 		} else {
 			# code...
-			$id = $this->input->post('id');
-			$judul_post = $this->input->post('judul');
-			$keyword = $this->input->post('keyword');
-			$isi_post = $this->input->post('isi');
-			$status_post = $this->input->post('status');
-			$foto = $this->upload->data('file_name');
+			$id_barang = $this->input->post('id_barang');
+			$nama_barang = $this->input->post('nama_barang');
+			$jenis = $this->input->post('jenis');
+			$jumlah = $this->input->post('jumlah');
+			$harga = $this->input->post('harga');
 		}
-		$this->model_adm->update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto);
-		redirect(base_url('index.php/Welcome/create_post'));
+		$this->model_adm->update_data_barang($id_barang, $nama_barang, $jenis, $jumlah, $harga);
+		$this->model_adm->update_data_barang_by($id_barang, $jumlah);
+		redirect(base_url('index.php/Welcome/'));
+	}
+	public function insert_barang_in()
+	{
+		# code...
+		$this->form_validation->set_rules('id_barang', 'id barang', 'required');
+		$this->form_validation->set_rules('id_supplier', 'supplier', 'required');
+		$this->form_validation->set_rules('detail_tanggal_masuk', 'Jumlah', 'required');
+		$this->form_validation->set_rules('jumlah_masuk', 'Harga', 'required');
+
+		if ($this->form_validation->run() == false) {
+			# code...
+			echo "upload gagal";
+		} else {
+			# code...
+			$id_barang = $this->input->post('id_barang');
+			$id_supplier = $this->input->post('id_supplier');
+			$detail_tanggal_masuk = $this->input->post('detail_tanggal_masuk');
+			$jumlah = $this->input->post('jumlah_stok');
+			$jumlah_masuk = $this->input->post('jumlah_masuk');
+			$total = $jumlah + $jumlah_masuk;
+		}
+		$this->model_adm->insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk);
+		$this->model_adm->update_data_barang_by($id_barang, $total);
+		redirect(base_url('index.php/Welcome/'));
 	}
 
 	public function delete_post($id_post)

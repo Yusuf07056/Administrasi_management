@@ -20,11 +20,6 @@
 								<label for="inputEmail">JENIS BARANG </label>
 							</div>
 							<div class="form-floating mb-3">
-								<input class="form-control" id="inputEmail" type="text" name="jumlah">
-								<!-- <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" /> -->
-								<label for="inputEmail">JUMLAH BARANG</label>
-							</div>
-							<div class="form-floating mb-3">
 								<input class="form-control" id="inputEmail" type="text" name="harga">
 								<!-- <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" /> -->
 								<label for="inputEmail">HARGA BARANG</label>
