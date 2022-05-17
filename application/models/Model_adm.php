@@ -7,13 +7,27 @@ class model_adm extends CI_Model
 		$query = $this->db->get('registrasi');
 		return $query;
 	}
+	public function get_registrasi_by($id_registrasi)
+	{
+		# code...
+		$query = $this->db->get_where('registrasi', ['id_registrasi' => $id_registrasi]);
+		return $query;
+	}
 	public function get_barang_select($id)
 	{
 		return $this->db->get_where('tb_barang', ['id_barang' => $id])->result_array();
 	}
+	public function get_barangIN_select($id)
+	{
+		return $this->db->get_where('tb_barang_masuk', ['id_barang_in' => $id])->result_array();
+	}
 	public function get_supplier()
 	{
 		return $this->db->get('tb_supplier')->result_array();
+	}
+	public function get_role()
+	{
+		return $this->db->get('list_role')->result_array();
 	}
 
 	public function update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto)
@@ -88,14 +102,15 @@ class model_adm extends CI_Model
 		# code...
 		return $this->db->delete('tb_barang', array('nama_barang' => $nama));
 	}
-	public function delete_verfikasi_pelamar($id)
+	public function delete_tb_barang_in($id)
 	{
 		# code...
-		return $this->db->delete('verifikasi_lamaran', array('id_verifikasi' => $id));
+		return $this->db->delete('tb_barang_masuk', array('id_barang_in' => $id));
 	}
-	public function update_method($id_post)
+	public function delete_tb_registrasi($id_registrasi)
 	{
 		# code...
+		return $this->db->delete('registrasi', array('id_registrasi' => $id_registrasi));
 	}
 
 	public function get_postingan()
@@ -117,20 +132,36 @@ class model_adm extends CI_Model
 		return $this->db->get_where('job_appointment', ['id_regis' => $id_regis]);
 	}
 
-	public function insert_registrasi($user, $email, $password, $no_telp, $gender, $tgl_lahir)
+	public function insert_registrasi($user, $email, $password, $role_id, $is_active, $no_telp, $gender, $tgl_lahir)
 	{
 		# code...
 		$data = [
 			'user_name' => htmlspecialchars($user),
 			'email' => htmlspecialchars($email),
 			'password' => password_hash($password, PASSWORD_DEFAULT),
-			'role_id' => 1,
-			'is_active' => 1,
+			'role_id' => $role_id,
+			'is_active' => $is_active,
 			'no_telp' => $no_telp,
 			'gender' => $gender,
 			'tgl_lahir' => $tgl_lahir
 		];
 		$this->db->insert('registrasi', $data);
+	}
+	public function insert_registrasi_update($id_registrasi, $user, $email, $password, $role_id, $is_active, $no_telp, $gender, $tgl_lahir)
+	{
+		# code...
+		$data = [
+			'user_name' => htmlspecialchars($user),
+			'email' => htmlspecialchars($email),
+			'password' => password_hash($password, PASSWORD_DEFAULT),
+			'role_id' => $role_id,
+			'is_active' => $is_active,
+			'no_telp' => $no_telp,
+			'gender' => $gender,
+			'tgl_lahir' => $tgl_lahir
+		];
+		$this->db->where('id_registrasi', $id_registrasi);
+		$this->db->update('registrasi', $data);
 	}
 	public function insert_jobdesk($jobdesk)
 	{
@@ -177,6 +208,17 @@ class model_adm extends CI_Model
 			'jumlah_masuk' => $jumlah_masuk
 		];
 		$this->db->insert('tb_barang_masuk', $data);
+	}
+	public function insert_barang_out($id_supplier, $id_barang, $jumlah_keluar, $tanggal_keluar)
+	{
+		# code...
+		$data = [
+			'id_supplier' => $id_supplier,
+			'id_barang' => $id_barang,
+			'jumlah_keluar' => $jumlah_keluar,
+			'tanggal_keluar	' => $tanggal_keluar
+		];
+		$this->db->insert('tb_barang_keluar', $data);
 	}
 
 	public function cek_email($email, $password)
@@ -230,6 +272,30 @@ class model_adm extends CI_Model
 			'status' => $status,
 		];
 		$this->db->insert('verifikasi_lamaran', $data);
+	}
+	public function join_tb_barang_masuk()
+	{
+		# code...
+		$this->db->select('tb_barang_masuk.id_barang_in, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.jumlah_masuk, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
+		$this->db->from('tb_barang_masuk')->join('tb_barang', 'tb_barang.id_barang = tb_barang_masuk.id_barang');
+		$this->db->join('tb_supplier', 'tb_supplier.id_supplier = tb_barang_masuk.id_supplier');
+		return $this->db->get()->result_array();
+	}
+	public function join_tb_barang_()
+	{
+		# code...
+		$this->db->select('tb_barang_masuk.id_barang_in, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.jumlah_masuk, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
+		$this->db->from('tb_barang_masuk')->join('tb_barang', 'tb_barang.id_barang = tb_barang_masuk.id_barang');
+		$this->db->join('tb_supplier', 'tb_supplier.id_supplier = tb_barang_masuk.id_supplier');
+		return $this->db->get()->result_array();
+	}
+	public function join_tb_barang_keluar()
+	{
+		# code...
+		$this->db->select('tb_barang_keluar.id_barang_out, tb_barang_keluar.tanggal_keluar, tb_barang_keluar.jumlah_keluar, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
+		$this->db->from('tb_barang_keluar')->join('tb_barang', 'tb_barang.id_barang = tb_barang_keluar.id_barang');
+		$this->db->join('tb_supplier', 'tb_supplier.id_supplier = tb_barang_keluar.id_supplier');
+		return $this->db->get()->result_array();
 	}
 	public function join_verifikasi_by($id_regis)
 	{

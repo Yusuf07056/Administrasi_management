@@ -115,6 +115,40 @@ class Welcome extends CI_Controller
 			redirect(base_url('index.php/Welcome'));
 		}
 	}
+	public function record_barang_masuk_()
+	{
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_barang'] = $this->model_adm->table_barang_view();
+		$data['join_tb_barang_in'] = $this->model_adm->join_tb_barang_masuk();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			# code...
+			$title['title'] = 'DASHBOARD';
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Tb_barang_masuk_body', $data);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
+		}
+	}
+	public function record_barang_keluar_()
+	{
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_barang'] = $this->model_adm->table_barang_view();
+		$data['join_tb_barang_out'] = $this->model_adm->join_tb_barang_keluar();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			# code...
+			$title['title'] = 'DASHBOARD';
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Tb_barang_keluar_body', $data);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
+		}
+	}
 	public function create_barang()
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
@@ -136,6 +170,18 @@ class Welcome extends CI_Controller
 		# code...
 		$this->model_adm->delete_tb_barang($nama);
 		redirect(base_url('index.php/Welcome'));
+	}
+	public function delete_reg($id_registrasi)
+	{
+		# code...
+		$this->model_adm->delete_tb_registrasi($id_registrasi);
+		redirect(base_url('index.php/Welcome'));
+	}
+	public function delete_barang_join($id)
+	{
+		# code...
+		$this->model_adm->delete_tb_barang_in($id);
+		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
 	public function list_job_appointment()
 	{
@@ -179,9 +225,36 @@ class Welcome extends CI_Controller
 	public function page_registration()
 	{
 		# code...
-		$this->load->view('templates/Header_LG');
-		$this->load->view('Register_body');
-		$this->load->view('templates/Footer_LG');
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['list_role'] = $this->model_adm->get_role();
+		$data['registrasi'] = $this->model_adm->get_registrasi();
+		$title['title'] = 'TAMBAH PEGAWAI';
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Register_body', $data);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
+		}
+	}
+	public function update_page_registration($id_registrasi)
+	{
+		# code...
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['list_role'] = $this->model_adm->get_role();
+		$data['registrasi'] = $this->model_adm->get_registrasi_by($id_registrasi);
+		$title['title'] = "EDIT PEGAWAI";
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Update_pegawai_body', $data);
+			$this->load->view('templates/Footer');
+		} else {
+			# code...
+			redirect(base_url('index.php/Welcome'));
+		}
 	}
 
 	public function registrasi()
@@ -215,10 +288,53 @@ class Welcome extends CI_Controller
 			$user = $this->input->post('user_name', true);
 			$email = $this->input->post('email', true);
 			$password = $this->input->post('password1');
+			$role_id = $this->input->post('role_id');
+			$is_active = $this->input->post('is_active');
 			$no_telp = $this->input->post('no_telp');
 			$gender = $this->input->post('gender');
 			$tgl_lahir = $this->input->post('tgl_lahir');
-			$this->model_adm->insert_registrasi($user, $email, $password, $no_telp, $gender, $tgl_lahir);
+			$this->model_adm->insert_registrasi($user, $email, $password, $role_id, $is_active, $no_telp, $gender, $tgl_lahir);
+			redirect(base_url('index.php/Welcome'));
+		}
+	}
+	public function insert_update_pegawai()
+	{
+		# code...
+		$this->form_validation->set_rules('user_name', 'User name', 'trim|required', ['required' => 'User name harus di isi']);
+		$this->form_validation->set_rules(
+			'email',
+			'email',
+			'required|trim|valid_email|is_unique[registrasi.email]',
+			[
+				'required' => 'email harus di isi',
+				'is_unique' => 'email sudah terdaftar'
+			]
+		);
+		$this->form_validation->set_rules('password1', 'password', 'required|trim|min_length[8]|matches[password2]', [
+			'required' => 'password harus di isi',
+			'matches' => 'password tidak cocok!',
+			'min_length' => 'PASSWORD TERLALU LEMAH'
+		]);
+		$this->form_validation->set_rules('password2', 'password', 'required|trim|matches[password1]', ['required' => 'password harus di isi']);
+		$this->form_validation->set_rules('no_telp', 'phone number', 'required|trim', ['required' => 'nomer telepon harus di isi']);
+		$this->form_validation->set_rules('gender', 'gender', 'required|trim', ['required' => 'gender harus di pilih']);
+		$this->form_validation->set_rules('tgl_lahir', 'tanggal lahir', 'required|trim', ['required' => 'tanggal lahir harus di isi']);
+
+		if ($this->form_validation->run() == FALSE) {
+			$this->load->view('templates/Header_LG');
+			$this->load->view('Login_body');
+			$this->load->view('templates/Footer_LG');
+		} else {
+			$id_registrasi = $this->input->post('id_registrasi');
+			$user = $this->input->post('user_name', true);
+			$email = $this->input->post('email', true);
+			$password = $this->input->post('password1');
+			$role_id = $this->input->post('role_id');
+			$is_active = $this->input->post('is_active');
+			$no_telp = $this->input->post('no_telp');
+			$gender = $this->input->post('gender');
+			$tgl_lahir = $this->input->post('tgl_lahir');
+			$this->model_adm->insert_registrasi_update($id_registrasi, $user, $email, $password, $role_id, $is_active, $no_telp, $gender, $tgl_lahir);
 			redirect(base_url('index.php/Welcome'));
 		}
 	}
@@ -266,6 +382,21 @@ class Welcome extends CI_Controller
 			$this->load->view('templates/Footer');
 		}
 	}
+	public function update_barang_in($id_barang)
+	{
+		# code...
+		$title['title'] = 'update';
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_barang_masuk'] = $this->model_adm->get_barangIN_select($id_barang);
+		$data['tb_barang'] = $this->model_adm->table_barang_view();
+		$data['tb_supplier'] = $this->model_adm->get_supplier();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Update_barangIN_body', $data);
+			$this->load->view('templates/Footer');
+		}
+	}
 
 	public function input_barang_masuk($id_barang)
 	{
@@ -278,6 +409,21 @@ class Welcome extends CI_Controller
 			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Barangmasuk_body', $data);
+			$this->load->view('templates/Footer');
+		}
+	}
+
+	public function input_barang_keluar($id_barang)
+	{
+		# code...
+		$title['title'] = 'barang masuk';
+		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
+		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
+		$data['tb_supplier'] = $this->model_adm->get_supplier();
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+			$this->load->view('templates/Header', $title);
+			$this->load->view('sidebar/Sidebar');
+			$this->load->view('Barangkeluar_body', $data);
 			$this->load->view('templates/Footer');
 		}
 	}
@@ -362,6 +508,54 @@ class Welcome extends CI_Controller
 		# code...
 		$this->form_validation->set_rules('id_barang', 'id barang', 'required');
 		$this->form_validation->set_rules('id_supplier', 'supplier', 'required');
+		$this->form_validation->set_rules('detail_tanggal_masuk', 'tanggal masuk', 'required');
+		$this->form_validation->set_rules('jumlah_masuk', 'jumlah masuk', 'required');
+
+		if ($this->form_validation->run() == false) {
+			# code...
+			echo "upload gagal";
+		} else {
+			# code...
+			$id_barang = $this->input->post('id_barang');
+			$id_supplier = $this->input->post('id_supplier');
+			$detail_tanggal_masuk = $this->input->post('detail_tanggal_masuk');
+			$jumlah = $this->input->post('jumlah_stok');
+			$jumlah_masuk = $this->input->post('jumlah_masuk');
+			$total = $jumlah + $jumlah_masuk;
+		}
+		$this->model_adm->insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk);
+		$this->model_adm->update_data_barang_by($id_barang, $total);
+		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
+	}
+	public function insert_barang_out()
+	{
+		# code...
+		$this->form_validation->set_rules('id_barang', 'id barang', 'required');
+		$this->form_validation->set_rules('id_supplier', 'supplier', 'required');
+		$this->form_validation->set_rules('tanggal_keluar', 'tanggal keluar', 'required');
+		$this->form_validation->set_rules('jumlah_keluar', 'jumlah keluar', 'required');
+
+		if ($this->form_validation->run() == false) {
+			# code...
+			echo "upload gagal";
+		} else {
+			# code...
+			$id_barang = $this->input->post('id_barang');
+			$id_supplier = $this->input->post('id_supplier');
+			$tanggal_keluar = $this->input->post('tanggal_keluar');
+			$jumlah = $this->input->post('jumlah_stok');
+			$jumlah_keluar = $this->input->post('jumlah_keluar');
+			$total = $jumlah - $jumlah_keluar;
+		}
+		$this->model_adm->insert_barang_out($id_supplier, $id_barang, $jumlah_keluar, $tanggal_keluar);
+		$this->model_adm->update_data_barang_by($id_barang, $total);
+		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
+	}
+	public function update_barang_join()
+	{
+		# code...
+		$this->form_validation->set_rules('id_barang', 'id barang', 'required');
+		$this->form_validation->set_rules('id_supplier', 'supplier', 'required');
 		$this->form_validation->set_rules('detail_tanggal_masuk', 'Jumlah', 'required');
 		$this->form_validation->set_rules('jumlah_masuk', 'Harga', 'required');
 
@@ -379,7 +573,7 @@ class Welcome extends CI_Controller
 		}
 		$this->model_adm->insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk);
 		$this->model_adm->update_data_barang_by($id_barang, $total);
-		redirect(base_url('index.php/Welcome/'));
+		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
 
 	public function delete_post($id_post)
