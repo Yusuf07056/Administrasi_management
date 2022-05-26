@@ -46,8 +46,8 @@
 						<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
 								<a class="nav-link" href="<?= base_url('index.php/welcome/page_registration') ?>">tabel pegawai</a>
-								<a class="nav-link" href="<?= base_url('index.php/welcome/record_barang_masuk_') ?>">tabel barang masuk</a>
-								<a class="nav-link" href="<?= base_url('index.php/welcome/record_barang_keluar_') ?>">tabel barang keluar</a>
+								<a class="nav-link" href="<?= base_url('index.php/welcome/record_barang_masuk_') ?>">record barang masuk</a>
+								<a class="nav-link" href="<?= base_url('index.php/welcome/record_barang_keluar_') ?>">record barang keluar</a>
 								<a class="nav-link" href="<?= base_url('index.php/welcome/tb_barang_page') ?>">tabel barang</a>
 								<a class="nav-link" href="<?= base_url('index.php/welcome/supplier_page_') ?>">tabel supplier</a>
 							</nav>

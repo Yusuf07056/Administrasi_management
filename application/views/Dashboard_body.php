@@ -12,7 +12,6 @@
 						TABEL BARANG
 					</div>
 					<div class="card-body">
-						<a class="btn btn-primary mb-2" href="<?= base_url('index.php/Welcome/create_barang') ?>">INPUT BARANG</a>
 						<table id="datatablesSimple">
 							<thead>
 								<tr>

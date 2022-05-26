@@ -413,12 +413,12 @@ class Welcome extends CI_Controller
 		}
 	}
 
-	public function input_barang_keluar($id_barang)
+	public function input_barang_keluar($id_barang_in)
 	{
 		# code...
 		$title['title'] = 'barang masuk';
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
+		$data['tb_barang_in'] = $this->model_adm->get_barangIN_select($id_barang_in);
 		$data['tb_supplier'] = $this->model_adm->get_supplier();
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
 			$this->load->view('templates/Header', $title);
@@ -426,6 +426,30 @@ class Welcome extends CI_Controller
 			$this->load->view('Barangkeluar_body', $data);
 			$this->load->view('templates/Footer');
 		}
+	}
+
+	public function insert_barang_out()
+	{
+		# code...
+		$this->form_validation->set_rules('id_barang_in', 'id barang masuk', 'required');
+		$this->form_validation->set_rules('tanggal_keluar', 'tanggal keluar', 'required');
+		$this->form_validation->set_rules('jumlah_keluar', 'jumlah keluar', 'required');
+
+		if ($this->form_validation->run() == false) {
+			# code...
+			echo "input gagal";
+		} else {
+			# code...
+			$id_barang = $this->input->post('id_barang');
+			$id_supplier = $this->input->post('id_supplier');
+			$tanggal_keluar = $this->input->post('tanggal_keluar');
+			$jumlah = $this->input->post('jumlah_stok');
+			$jumlah_keluar = $this->input->post('jumlah_keluar');
+			$total = $jumlah - $jumlah_keluar;
+		}
+		$this->model_adm->insert_barang_out($id_supplier, $id_barang, $jumlah_keluar, $tanggal_keluar);
+		$this->model_adm->update_data_barang_by($id_barang, $total);
+		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
 
 	public function tb_barang_page()
@@ -527,30 +551,7 @@ class Welcome extends CI_Controller
 		$this->model_adm->update_data_barang_by($id_barang, $total);
 		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
-	public function insert_barang_out()
-	{
-		# code...
-		$this->form_validation->set_rules('id_barang', 'id barang', 'required');
-		$this->form_validation->set_rules('id_supplier', 'supplier', 'required');
-		$this->form_validation->set_rules('tanggal_keluar', 'tanggal keluar', 'required');
-		$this->form_validation->set_rules('jumlah_keluar', 'jumlah keluar', 'required');
 
-		if ($this->form_validation->run() == false) {
-			# code...
-			echo "upload gagal";
-		} else {
-			# code...
-			$id_barang = $this->input->post('id_barang');
-			$id_supplier = $this->input->post('id_supplier');
-			$tanggal_keluar = $this->input->post('tanggal_keluar');
-			$jumlah = $this->input->post('jumlah_stok');
-			$jumlah_keluar = $this->input->post('jumlah_keluar');
-			$total = $jumlah - $jumlah_keluar;
-		}
-		$this->model_adm->insert_barang_out($id_supplier, $id_barang, $jumlah_keluar, $tanggal_keluar);
-		$this->model_adm->update_data_barang_by($id_barang, $total);
-		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
-	}
 	public function update_barang_join()
 	{
 		# code...

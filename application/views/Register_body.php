@@ -53,7 +53,7 @@
 								<label for="inputLastName">TANGGAL LAHIR</label>
 							</div>
 							<div class="d-flex align-items-center justify-content-between mt-4 mb-4">
-								<button class="btn btn-info">UPDATE</button>
+								<button class="btn btn-info">INPUT</button>
 							</div>
 						</form>
 						<table id="datatablesSimple">

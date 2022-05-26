@@ -29,6 +29,7 @@
 										<td>
 											<a href="<?= base_url('index.php/Welcome/delete_barang_join/') . $join_barang_view['id_barang_in'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
 											<a href="<?= base_url('index.php/Welcome/update_barang_in/') . $join_barang_view['id_barang_in'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+											<a href="<?= base_url('index.php/Welcome/input_barang_keluar/') . $join_barang_view['id_barang_in'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>Input barang keluar</a>
 										</td>
 									</tr>
 								<?php endforeach; ?>
