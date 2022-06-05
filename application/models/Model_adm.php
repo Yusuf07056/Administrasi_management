@@ -210,7 +210,7 @@ class model_adm extends CI_Model
 		];
 		$this->db->insert('tb_barang_masuk', $data);
 	}
-	public function insert_barang_out($id_barang_in,$id_supplier, $id_barang, $jumlah_keluar, $total, $tanggal_keluar, $bulan)
+	public function insert_barang_out($id_barang_in, $id_supplier, $id_barang, $jumlah_keluar, $total, $tanggal_keluar, $bulan)
 	{
 		# code...
 		$data = [
@@ -242,7 +242,7 @@ class model_adm extends CI_Model
 				$this->session->set_userdata($data);
 
 				if ($registrasi['role_id'] == 2) {
-					redirect(base_url('index.php/Kariyawan_ctrl/'));
+					redirect(base_url('index.php/Welcome/dashboard'));
 				} elseif ($registrasi['role_id'] == 1) {
 					redirect(base_url('index.php/Welcome/dashboard'));
 				} else {

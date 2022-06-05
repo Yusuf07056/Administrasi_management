@@ -42,7 +42,7 @@ class Welcome extends CI_Controller
 				redirect(base_url('index.php/Welcome/dashboard'));
 			} else {
 				# code...
-				redirect(base_url('index.php/Kariyawan_ctrl/main_page'));
+				redirect(base_url('index.php/Welcome/create_barang'));
 			}
 		} elseif ($this->form_validation->run() == FALSE) {
 			# code...
@@ -120,7 +120,7 @@ class Welcome extends CI_Controller
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_barang'] = $this->model_adm->table_barang_view();
 		$data['join_tb_barang_in'] = $this->model_adm->join_tb_barang_masuk();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			# code...
 			$title['title'] = 'DASHBOARD';
 			$this->load->view('templates/Header', $title);
@@ -137,7 +137,7 @@ class Welcome extends CI_Controller
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_barang'] = $this->model_adm->table_barang_view();
 		$data['join_tb_barang_out'] = $this->model_adm->join_tb_barang_keluar();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			# code...
 			$title['title'] = 'DASHBOARD';
 			$this->load->view('templates/Header', $title);
@@ -153,7 +153,7 @@ class Welcome extends CI_Controller
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_barang'] = $this->model_adm->table_barang_view();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			# code...
 			$title['title'] = 'INPUT BARANG';
 			$this->load->view('templates/Header', $title);
@@ -183,44 +183,7 @@ class Welcome extends CI_Controller
 		$this->model_adm->delete_tb_barang_in($id);
 		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
-	public function list_job_appointment()
-	{
-		$data['join_appointment'] = $this->model_adm->join_appointment_by();
-		$data['join_verifikasi'] = $this->model_adm->join_verifikasi();
-		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
-			# code...
-			$this->load->view('templates/Header');
-			$this->load->view('sidebar/Sidebar');
-			$this->load->view('lamaran_list_adm', $data);
-			$this->load->view('templates/Footer');
-		} else {
-			# code...
-			redirect(base_url('index.php/Welcome'));
-		}
-	}
 
-	public function konfirmasi_lamaran()
-	{
-		# code...
-		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
-		$data_postingan['post_information'] =  $this->model_adm->get_postingan();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
-			# code...
-			$id_pelamar = $this->input->post('id_pelamar');
-			$id_registrasi = $this->input->post('id_registrasi');
-			$id_perusahaan = $this->input->post('id_perusahaan');
-			$status = $this->input->post('status');
-			$this->model_adm->insert_verifikasi($id_registrasi, $id_pelamar, $id_perusahaan, $status);
-			redirect(base_url('index.php/Welcome/list_job_appointment'));
-		} else {
-			# code...
-			$error = array('error' => $this->upload->display_errors());
-			echo "<div>" . $error['error'] . "</div>";
-			// redirect(base_url('index.php/Welcome'));
-		}
-	}
 
 	public function page_registration()
 	{
@@ -375,7 +338,7 @@ class Welcome extends CI_Controller
 		$title['title'] = 'update';
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Update_body', $data);
@@ -390,7 +353,7 @@ class Welcome extends CI_Controller
 		$data['tb_barang_masuk'] = $this->model_adm->get_barangIN_select($id_barang);
 		$data['tb_barang'] = $this->model_adm->table_barang_view();
 		$data['tb_supplier'] = $this->model_adm->get_supplier();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Update_barangIN_body', $data);
@@ -405,7 +368,7 @@ class Welcome extends CI_Controller
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
 		$data['tb_supplier'] = $this->model_adm->get_supplier();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Barangmasuk_body', $data);
@@ -413,7 +376,7 @@ class Welcome extends CI_Controller
 		}
 	}
 
-	public function input_barang_keluar($id_barang,$id_barang_in)
+	public function input_barang_keluar($id_barang, $id_barang_in)
 	{
 		# code...
 		$title['title'] = 'barang masuk';
@@ -421,7 +384,7 @@ class Welcome extends CI_Controller
 		$data['tb_barang'] = $this->model_adm->get_barang_select($id_barang);
 		$data['tb_supplier'] = $this->model_adm->get_supplier();
 		$data['tb_record_barang_masuk'] = $this->model_adm->join_tb_barang_masuk_by($id_barang_in);
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			$this->load->view('templates/Header', $title);
 			$this->load->view('sidebar/Sidebar');
 			$this->load->view('Barangkeluar_body', $data);
@@ -433,7 +396,7 @@ class Welcome extends CI_Controller
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_barang'] = $this->model_adm->table_barang_view();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			# code...
 			$title['title'] = 'data barang';
 			$this->load->view('templates/Header', $title);
@@ -449,7 +412,7 @@ class Welcome extends CI_Controller
 	{
 		$data['registrasi'] = $this->db->get_where('registrasi', ['email' => $this->session->userdata('email')])->row_array();
 		$data['tb_supplier'] = $this->model_adm->get_supplier();
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			# code...
 			$title['title'] = 'supplier';
 			$this->load->view('templates/Header', $title);
@@ -551,7 +514,7 @@ class Welcome extends CI_Controller
 			$total = $jumlah - $jumlah_keluar;
 			$bulan = $this->input->post('bulan');
 		}
-		$this->model_adm->insert_barang_out($id_barang_in,$id_supplier, $id_barang, $jumlah_keluar, $total, $tanggal_keluar, $bulan);
+		$this->model_adm->insert_barang_out($id_barang_in, $id_supplier, $id_barang, $jumlah_keluar, $total, $tanggal_keluar, $bulan);
 		$this->model_adm->update_data_barang_by($id_barang, $total);
 		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
@@ -580,15 +543,6 @@ class Welcome extends CI_Controller
 		redirect(base_url('index.php/Welcome/record_barang_masuk_'));
 	}
 
-	public function delete_post($id_post)
-	{
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
-			$this->model_adm->delete_method($id_post);
-			redirect(base_url('index.php/Welcome/create_post'));
-		} else {
-			$this->logout();
-		}
-	}
 	public function delete_supplier($id_supplier)
 	{
 		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
@@ -598,37 +552,18 @@ class Welcome extends CI_Controller
 			$this->logout();
 		}
 	}
-	public function delete_jobdesk($id)
-	{
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
-			$this->model_adm->delete_jobdesk_method($id);
-			redirect(base_url('index.php/Welcome/create_post'));
-		} else {
-			$this->logout();
-		}
-	}
-
-	public function delete_verifikasi_data_pelamar($id)
-	{
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
-			$this->model_adm->delete_verfikasi_pelamar($id);
-			redirect(base_url('index.php/Welcome/list_job_appointment'));
-		} else {
-			$this->logout();
-		}
-	}
 	public function select_to_print()
 	{
-		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1) {
+		if ($this->session->userdata('email') && $this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) {
 			$this->form_validation->set_rules('bulan', 'pilih bulan', 'required');
-		if ($this->form_validation->run() == false) {
-			# code...
-			echo "gagal";
-		}else{
-			$bulan = $this->input->post('bulan');
-			$data['join_barang_out_by'] = $this->model_adm->join_tb_barang_keluar_by($bulan);
-			$this->load->view('print_body',$data);
-		}
+			if ($this->form_validation->run() == false) {
+				# code...
+				echo "gagal";
+			} else {
+				$bulan = $this->input->post('bulan');
+				$data['join_barang_out_by'] = $this->model_adm->join_tb_barang_keluar_by($bulan);
+				$this->load->view('print_body', $data);
+			}
 		} else {
 			$this->logout();
 		}
