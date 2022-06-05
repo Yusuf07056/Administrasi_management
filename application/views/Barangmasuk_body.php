@@ -19,12 +19,14 @@
 									<label for="inputEmail">JENIS BARANG </label>
 								</div>
 								<div class="form-floating mb-3">
+									<input class="form-control" id="inputEmail" type="text" name="jumlah_stok" value="<?= $barang_view['jumlah'] ?>" hidden>
 									<input class="form-control" id="inputEmail" type="text" name="jumlah_stok" value="<?= $barang_view['jumlah'] ?>" disabled>
 									<!-- <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" /> -->
 									<label for="inputEmail">JUMLAH STOK</label>
 								</div>
 
 							<?php endforeach; ?>
+							
 							<div class="form-floating mb-3">
 								<select class="form-control" name="id_supplier" id="supplier">
 									<?php foreach ($tb_supplier as $supplier_view) : ?>

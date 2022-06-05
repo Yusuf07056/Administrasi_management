@@ -27,6 +27,12 @@
 
 							<?php endforeach; ?>
 							<div class="form-floating mb-3">
+									<?php foreach ($tb_record_barang_masuk as $barang_masuk_view) : ?>
+										<input class="form-control" id="inputEmail" type="text" name="id_barang_in" value="<?= $barang_masuk_view['id_barang_in']; ?>" hidden>
+									<?php endforeach; ?>
+									<label for="inputEmail">RECORD AKUMULASI BARANG</label>
+								</div>
+							<div class="form-floating mb-3">
 								<select class="form-control" name="id_supplier" id="supplier">
 									<?php foreach ($tb_supplier as $supplier_view) : ?>
 										<option value="<?= $supplier_view['id_supplier']; ?>"><?= $supplier_view['nama_supplier']; ?></option>
@@ -44,6 +50,20 @@
 								<!-- <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" /> -->
 								<label for="inputEmail">tanggal</label>
 							</div>
+							<select class="form-control mb-3" name="bulan" id="bulan">
+								<option value="januari">januari</option>
+								<option value="februari">februari</option>
+								<option value="maret">maret</option>
+								<option value="april">april</option>
+								<option value="mei">mei</option>
+								<option value="juni">juni</option>
+								<option value="juli">juli</option>
+								<option value="agustus">januari</option>
+								<option value="september">januari</option>
+								<option value="oktober">januari</option>
+								<option value="november">januari</option>
+								<option value="desember">januari</option>
+							</select>
 							<div class="d-flex align-items-center justify-content-between mt-4 mb-0">
 								<button class="btn btn-info">INPUT</button>
 							</div>

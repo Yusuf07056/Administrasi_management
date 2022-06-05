@@ -198,25 +198,29 @@ class model_adm extends CI_Model
 		];
 		$this->db->insert('tb_supplier', $data);
 	}
-	public function insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk)
+	public function insert_barang_IN($id_barang, $id_supplier, $detail_tanggal_masuk, $jumlah_masuk, $total)
 	{
 		# code...
 		$data = [
 			'id_barang' => $id_barang,
 			'id_supplier' => $id_supplier,
 			'detail_tanggal_masuk' => $detail_tanggal_masuk,
-			'jumlah_masuk' => $jumlah_masuk
+			'jumlah_masuk' => $jumlah_masuk,
+			'akumulasi_barang' => $total,
 		];
 		$this->db->insert('tb_barang_masuk', $data);
 	}
-	public function insert_barang_out($id_supplier, $id_barang, $jumlah_keluar, $tanggal_keluar)
+	public function insert_barang_out($id_barang_in,$id_supplier, $id_barang, $jumlah_keluar, $total, $tanggal_keluar, $bulan)
 	{
 		# code...
 		$data = [
+			'idbarang_in' => $id_barang_in,
 			'id_supplier' => $id_supplier,
 			'id_barang' => $id_barang,
 			'jumlah_keluar' => $jumlah_keluar,
-			'tanggal_keluar	' => $tanggal_keluar
+			'sisa_barang' => $total,
+			'tanggal_keluar	' => $tanggal_keluar,
+			'bulan' => $bulan
 		];
 		$this->db->insert('tb_barang_keluar', $data);
 	}
@@ -276,9 +280,18 @@ class model_adm extends CI_Model
 	public function join_tb_barang_masuk()
 	{
 		# code...
-		$this->db->select('tb_barang_masuk.id_barang_in, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.jumlah_masuk, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
+		$this->db->select('tb_barang_masuk.id_barang_in, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.id_barang, tb_barang_masuk.akumulasi_barang, tb_barang_masuk.jumlah_masuk, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
 		$this->db->from('tb_barang_masuk')->join('tb_barang', 'tb_barang.id_barang = tb_barang_masuk.id_barang');
 		$this->db->join('tb_supplier', 'tb_supplier.id_supplier = tb_barang_masuk.id_supplier');
+		return $this->db->get()->result_array();
+	}
+	public function join_tb_barang_masuk_by($id_barang_in)
+	{
+		# code...
+		$this->db->select('tb_barang_masuk.id_barang_in, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.id_barang, tb_barang_masuk.akumulasi_barang, tb_barang_masuk.jumlah_masuk, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
+		$this->db->from('tb_barang_masuk')->join('tb_barang', 'tb_barang.id_barang = tb_barang_masuk.id_barang');
+		$this->db->join('tb_supplier', 'tb_supplier.id_supplier = tb_barang_masuk.id_supplier');
+		$this->db->where('tb_barang_masuk.id_barang_in', $id_barang_in);
 		return $this->db->get()->result_array();
 	}
 	public function join_tb_barang_()
@@ -292,9 +305,18 @@ class model_adm extends CI_Model
 	public function join_tb_barang_keluar()
 	{
 		# code...
-		$this->db->select('tb_barang_keluar.id_barang_out, tb_barang_keluar.tanggal_keluar, tb_barang_keluar.jumlah_keluar, tb_barang.nama_barang,tb_barang.jumlah, tb_supplier.nama_supplier');
+		$this->db->select('tb_barang_keluar.id_barang_out,tb_barang.nama_barang, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.akumulasi_barang, tb_barang_keluar.jumlah_keluar, tb_barang_keluar.sisa_barang,tb_barang_keluar.tanggal_keluar');
 		$this->db->from('tb_barang_keluar')->join('tb_barang', 'tb_barang.id_barang = tb_barang_keluar.id_barang');
-		$this->db->join('tb_supplier', 'tb_supplier.id_supplier = tb_barang_keluar.id_supplier');
+		$this->db->join('tb_barang_masuk', 'tb_barang_keluar.idbarang_in = tb_barang_masuk.id_barang_in');
+		return $this->db->get()->result_array();
+	}
+	public function join_tb_barang_keluar_by($bulan)
+	{
+		# code...
+		$this->db->select('tb_barang_keluar.id_barang_out,tb_barang.nama_barang, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.akumulasi_barang, tb_barang_keluar.jumlah_keluar, tb_barang_keluar.sisa_barang,tb_barang_keluar.tanggal_keluar');
+		$this->db->from('tb_barang_keluar')->join('tb_barang', 'tb_barang.id_barang = tb_barang_keluar.id_barang');
+		$this->db->join('tb_barang_masuk', 'tb_barang_keluar.idbarang_in = tb_barang_masuk.id_barang_in');
+		$this->db->where('tb_barang_keluar.bulan', $bulan);
 		return $this->db->get()->result_array();
 	}
 	public function join_verifikasi_by($id_regis)
