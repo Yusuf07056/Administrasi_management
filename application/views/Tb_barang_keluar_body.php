@@ -35,7 +35,7 @@
 									<th>Record keluar</th>
 									<th>TGL keluar</th>
 									<th>sisa barang</th>
-									<th>action</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -48,8 +48,10 @@
 										<td><?= $join_barang_view['tanggal_keluar'] ?></td>
 										<td><?= $join_barang_view['sisa_barang'] ?></td>
 										<td>
-											<a href="<?= base_url('index.php/Welcome/delete_barang_join/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
-											<a href="<?= base_url('index.php/Welcome/update_barang_in/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+											<?php if ($this->session->userdata('role_id') == 1) { ?>
+												<a href="<?= base_url('index.php/Welcome/delete_barang_join/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
+												<a href="<?= base_url('index.php/Welcome/update_barang_in/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+											<?php } ?>
 										</td>
 									</tr>
 								<?php endforeach; ?>

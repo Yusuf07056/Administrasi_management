@@ -2,7 +2,7 @@
 	<div id="layoutSidenav_content">
 		<main>
 			<div class="container-fluid px-4">
-				<h1 class="mt-4">Dashboard</h1>
+				<h1 class="mt-4">Tabel barang</h1>
 				<ol class="breadcrumb mb-4">
 					<li class="breadcrumb-item active">Dashboard</li>
 				</ol>
@@ -20,7 +20,7 @@
 									<th>Jenis barang</th>
 									<th>Jumlah</th>
 									<th>Harga</th>
-									<th>action</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -31,10 +31,11 @@
 										<td><?= $barang_view['jumlah'] ?></td>
 										<td><?= $barang_view['harga'] ?></td>
 										<td>
-											<a href="<?= base_url('index.php/Welcome/delete_barang/') . $barang_view['nama_barang'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
-											<a href="<?= base_url('index.php/Welcome/update_barang/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
-											<a href="<?= base_url('index.php/Welcome/input_barang_masuk/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-pen"></i>BARANG IN</a>
-											<a href="<?= base_url('index.php/Welcome/input_barang_keluar/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-pen"></i>BARANG OUT</a>
+											<a href="<?= base_url('index.php/Welcome/input_barang_masuk/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-pen"></i>INPUT BARANG MASUK</a>
+											<?php if ($this->session->userdata('role_id') == 1) { ?>
+												<a href="<?= base_url('index.php/Welcome/delete_barang/') . $barang_view['nama_barang'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
+												<a href="<?= base_url('index.php/Welcome/update_barang/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+											<?php } ?>
 										</td>
 									</tr>
 								<?php endforeach; ?>

@@ -31,7 +31,7 @@
 									<th>Nama supplier</th>
 									<th>No.telp</th>
 									<th>Alamat</th>
-									<th>action</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -41,8 +41,10 @@
 										<td><?= $view_supplier['no_telp'] ?></td>
 										<td><?= $view_supplier['alamat'] ?></td>
 										<td>
-											<a href="<?= base_url('index.php/Welcome/delete_supplier/') . $view_supplier['id_supplier'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
-											<a href="<?= base_url('index.php/Welcome/update_supplier/') . $view_supplier['id_supplier'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+											<?php if ($this->session->userdata('role_id') == 1) { ?>
+												<a href="<?= base_url('index.php/Welcome/delete_supplier/') . $view_supplier['id_supplier'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
+												<a href="<?= base_url('index.php/Welcome/update_supplier/') . $view_supplier['id_supplier'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+											<?php } ?>
 										</td>
 									</tr>
 								<?php endforeach; ?>
