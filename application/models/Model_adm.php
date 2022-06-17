@@ -21,6 +21,10 @@ class model_adm extends CI_Model
 	{
 		return $this->db->get_where('tb_barang_masuk', ['id_barang_in' => $id])->result_array();
 	}
+	public function get_barangOUT_select($id)
+	{
+		return $this->db->get_where('tb_barang_keluar', ['id_barang_out' => $id])->result_array();
+	}
 	public function get_supplier()
 	{
 		return $this->db->get('tb_supplier')->result_array();
@@ -30,19 +34,33 @@ class model_adm extends CI_Model
 		return $this->db->get('list_role')->result_array();
 	}
 
-	public function update_data($id, $judul_post, $keyword, $isi_post, $status_post, $foto)
+	public function update_profil($id_registrasi, $user, $email, $role_id, $is_active, $no_telp, $gender, $tgl_lahir)
 	{
 		# code...
 		$data = array(
-			'judul_post' => $judul_post,
-			'keyword' => $keyword,
-			'isi_post' => $isi_post,
-			'status_post' => $status_post,
-			'foto' => $foto
+			'user_name' => htmlspecialchars($user),
+			'email' => htmlspecialchars($email),
+			'role_id' => $role_id,
+			'is_active' => $is_active,
+			'no_telp' => $no_telp,
+			'gender' => $gender,
+			'tgl_lahir' => $tgl_lahir
 		);
 
-		$this->db->where('id_post', $id);
-		$this->db->update('post_information', $data);
+		$this->db->where('id_registrasi', $id_registrasi);
+		$this->db->update('registrasi', $data);
+	}
+	public function bekukan_akun($id_registrasi, $status)
+	{
+		$data = array('is_active' => $status);
+		$this->db->where('id_registrasi', $id_registrasi);
+		$this->db->update('registrasi', $data);
+	}
+	public function update_password($id_registrasi, $password)
+	{
+		$data = array('password' => password_hash($password, PASSWORD_DEFAULT));
+		$this->db->where('id_registrasi', $id_registrasi);
+		$this->db->update('registrasi', $data);
 	}
 
 	public function update_data_barang($id_barang, $nama_barang, $jenis, $jumlah, $harga)
@@ -67,6 +85,17 @@ class model_adm extends CI_Model
 
 		$this->db->where('id_barang', $id_barang);
 		$this->db->update('tb_barang', $data);
+	}
+	public function update_barang_IN($id_barang_in, $detail_tanggal_masuk, $jumlah_masuk, $total)
+	{
+		# code...
+		$data = array(
+			'detail_tanggal_masuk' => $detail_tanggal_masuk,
+			'jumlah_masuk' => $jumlah_masuk,
+			'akumulasi_barang' => $total
+		);
+		$this->db->where('id_barang_in', $id_barang_in);
+		$this->db->update('tb_barang_masuk', $data);
 	}
 	public function cetak_data()
 	{
@@ -97,15 +126,20 @@ class model_adm extends CI_Model
 		# code...
 		return $this->db->delete('tb_jobdesk', array('id' => $id));
 	}
-	public function delete_tb_barang($nama)
+	public function delete_tb_barang($id_barang)
 	{
 		# code...
-		return $this->db->delete('tb_barang', array('nama_barang' => $nama));
+		return $this->db->delete('tb_barang', array('id_barang' => $id_barang));
 	}
 	public function delete_tb_barang_in($id)
 	{
 		# code...
 		return $this->db->delete('tb_barang_masuk', array('id_barang_in' => $id));
+	}
+	public function delete_tb_barang_out($id)
+	{
+		# code...
+		return $this->db->delete('tb_barang_keluar', array('id_barang_out' => $id));
 	}
 	public function delete_tb_registrasi($id_registrasi)
 	{
@@ -147,21 +181,9 @@ class model_adm extends CI_Model
 		];
 		$this->db->insert('registrasi', $data);
 	}
-	public function insert_registrasi_update($id_registrasi, $user, $email, $password, $role_id, $is_active, $no_telp, $gender, $tgl_lahir)
+	public function insert_registrasi_update($id_registrasi, $data)
 	{
-		# code...
-		$data = [
-			'user_name' => htmlspecialchars($user),
-			'email' => htmlspecialchars($email),
-			'password' => password_hash($password, PASSWORD_DEFAULT),
-			'role_id' => $role_id,
-			'is_active' => $is_active,
-			'no_telp' => $no_telp,
-			'gender' => $gender,
-			'tgl_lahir' => $tgl_lahir
-		];
-		$this->db->where('id_registrasi', $id_registrasi);
-		$this->db->update('registrasi', $data);
+		return $this->db->update('registrasi', $data, ['id_registrasi' => $id_registrasi]);
 	}
 	public function insert_jobdesk($jobdesk)
 	{
@@ -206,7 +228,7 @@ class model_adm extends CI_Model
 			'id_supplier' => $id_supplier,
 			'detail_tanggal_masuk' => $detail_tanggal_masuk,
 			'jumlah_masuk' => $jumlah_masuk,
-			'akumulasi_barang' => $total,
+			'akumulasi_barang' => $total
 		];
 		$this->db->insert('tb_barang_masuk', $data);
 	}
@@ -310,13 +332,25 @@ class model_adm extends CI_Model
 		$this->db->join('tb_barang_masuk', 'tb_barang_keluar.idbarang_in = tb_barang_masuk.id_barang_in');
 		return $this->db->get()->result_array();
 	}
-	public function join_tb_barang_keluar_by($bulan)
+	public function join_tb_barang_keluar_by($nama_barang, $bulan1, $bulan2)
 	{
 		# code...
 		$this->db->select('tb_barang_keluar.id_barang_out,tb_barang.nama_barang, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.akumulasi_barang, tb_barang_keluar.jumlah_keluar, tb_barang_keluar.sisa_barang,tb_barang_keluar.tanggal_keluar');
 		$this->db->from('tb_barang_keluar')->join('tb_barang', 'tb_barang.id_barang = tb_barang_keluar.id_barang');
 		$this->db->join('tb_barang_masuk', 'tb_barang_keluar.idbarang_in = tb_barang_masuk.id_barang_in');
-		$this->db->where('tb_barang_keluar.bulan', $bulan);
+		$this->db->where('tb_barang_masuk.detail_tanggal_masuk >=', $bulan1);
+		$this->db->where('tb_barang_keluar.tanggal_keluar <=', $bulan2);
+		$this->db->where('tb_barang.nama_barang', $nama_barang);
+		return $this->db->get()->result_array();
+	}
+	public function join_tb_barangkeluar_by($bulan1, $bulan2)
+	{
+		# code...
+		$this->db->select('tb_barang_keluar.id_barang_out,tb_barang.nama_barang, tb_barang_masuk.detail_tanggal_masuk, tb_barang_masuk.akumulasi_barang, tb_barang_keluar.jumlah_keluar, tb_barang_keluar.sisa_barang,tb_barang_keluar.tanggal_keluar');
+		$this->db->from('tb_barang_keluar')->join('tb_barang', 'tb_barang.id_barang = tb_barang_keluar.id_barang');
+		$this->db->join('tb_barang_masuk', 'tb_barang_keluar.idbarang_in = tb_barang_masuk.id_barang_in');
+		$this->db->where('tb_barang_masuk.detail_tanggal_masuk >=', $bulan1);
+		$this->db->where('tb_barang_keluar.tanggal_keluar <=', $bulan2);
 		return $this->db->get()->result_array();
 	}
 	public function join_verifikasi_by($id_regis)

@@ -33,7 +33,7 @@
 										<td>
 											<a href="<?= base_url('index.php/Welcome/input_barang_masuk/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-pen"></i>INPUT BARANG MASUK</a>
 											<?php if ($this->session->userdata('role_id') == 1) { ?>
-												<a href="<?= base_url('index.php/Welcome/delete_barang/') . $barang_view['nama_barang'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
+												<a href="<?= base_url('index.php/Welcome/delete_barang/') . $barang_view['id_barang'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
 												<a href="<?= base_url('index.php/Welcome/update_barang/') . $barang_view['id_barang'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
 											<?php } ?>
 										</td>

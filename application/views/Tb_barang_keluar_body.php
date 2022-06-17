@@ -10,20 +10,18 @@
 					<div class="card-body">
 						PRINT
 						<form action="<?= base_url('index.php/Welcome/select_to_print/') ?>" method="post">
-							<select class="form-control mb-3" name="bulan" id="bulan">
-								<option value="januari">januari</option>
-								<option value="februari">februari</option>
-								<option value="maret">maret</option>
-								<option value="april">april</option>
-								<option value="mei">mei</option>
-								<option value="juni">juni</option>
-								<option value="juli">juli</option>
-								<option value="agustus">januari</option>
-								<option value="september">januari</option>
-								<option value="oktober">januari</option>
-								<option value="november">januari</option>
-								<option value="desember">januari</option>
-							</select>
+							<div class="form-floating mb-3">
+								<select class="form-control" name="nama_barang" id="supplier">
+									<?php foreach ($tb_barang as $barang_view) : ?>
+										<option value="<?= $barang_view['nama_barang']; ?>"><?= $barang_view['nama_barang']; ?></option>
+									<?php endforeach; ?>
+								</select>
+								<label for="inputEmail">NAMA BARANG</label>
+							</div>
+							tanggal mulai:
+							<input type="date" class="form-control mb-3" name="bulan1">
+							tanggal selesai :
+							<input type="date" class="form-control mb-3" name="bulan2">
 							<input type="submit" class="btn btn-primary mb-3" value="PRINT">
 						</form>
 						<table id="datatablesSimple">
@@ -49,8 +47,7 @@
 										<td><?= $join_barang_view['sisa_barang'] ?></td>
 										<td>
 											<?php if ($this->session->userdata('role_id') == 1) { ?>
-												<a href="<?= base_url('index.php/Welcome/delete_barang_join/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
-												<a href="<?= base_url('index.php/Welcome/update_barang_in/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>UPDATE</a>
+												<a href="<?= base_url('index.php/Welcome/delete_barang_out_join/') . $join_barang_view['id_barang_out'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
 											<?php } ?>
 										</td>
 									</tr>

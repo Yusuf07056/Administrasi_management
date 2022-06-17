@@ -83,7 +83,9 @@
 										<td><?= $reg_view['tgl_lahir'] ?></td>
 										<td>
 											<a href="<?= base_url('index.php/Welcome/delete_reg/') . $reg_view['id_registrasi'] ?>" class="btn btn-primary m-lg-2"><i class="fas fa-eraser"></i>DELETE</a>
-											<a href="<?= base_url('index.php/Welcome/update_page_registration/') . $reg_view['id_registrasi'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>EDIT</a>
+											<a href="<?= base_url('index.php/Welcome/update_profil_page/') . $reg_view['id_registrasi'] ?>" class="btn btn-primary"><i class="fas fa-user-alt"></i> EDIT PROFIL</a>
+											<a href="<?= base_url('index.php/Welcome/update_password_page/') . $reg_view['id_registrasi'] ?>" class="btn btn-primary"><i class="fas fa-key"></i> EDIT PASSWORD</a>
+											<a href="<?= base_url('index.php/Welcome/freeze_account/') . $reg_view['id_registrasi'] ?>" class="btn btn-primary"></i>FREEZE</a>
 										</td>
 									</tr>
 								<?php endforeach; ?>

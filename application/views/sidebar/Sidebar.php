@@ -28,8 +28,8 @@
 	<div id="layoutSidenav_nav">
 		<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
 			<div class="sb-sidenav-menu">
-				<div class="nav">
-					<?php if ($this->session->userdata('role_id') == 1) { ?>
+				<?php if ($this->session->userdata('role_id') == 1) { ?>
+					<div class="nav">
 						<div class="sb-sidenav-menu-heading">MENU ADMIN</div>
 						<a class="nav-link" href="<?= base_url('index.php/Welcome/dashboard') ?>">
 							<div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -52,14 +52,16 @@
 								<a class="nav-link" href="<?= base_url('index.php/welcome/supplier_page_') ?>">data supplier</a>
 							</nav>
 						</div>
-					<?php } else { ?>
+					</div>
+				<?php } else { ?>
+					<div class="nav">
 						<div class="sb-sidenav-menu-heading">MENU KARIYAWAN</div>
 						<a class="nav-link" href="<?= base_url('index.php/welcome/record_barang_masuk_') ?>">barang masuk</a>
 						<a class="nav-link" href="<?= base_url('index.php/welcome/record_barang_keluar_') ?>">record barang keluar</a>
 						<a class="nav-link" href="<?= base_url('index.php/welcome/tb_barang_page') ?>">tabel barang</a>
 						<a class="nav-link" href="<?= base_url('index.php/welcome/supplier_page_') ?>">data supplier</a>
-					<?php } ?>
-				</div>
+					</div>
+				<?php } ?>
 			</div>
 			<div class="sb-sidenav-footer">
 				<div class="small">Logged in as:</div>
