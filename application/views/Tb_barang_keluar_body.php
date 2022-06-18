@@ -11,11 +11,12 @@
 						PRINT
 						<form action="<?= base_url('index.php/Welcome/select_to_print/') ?>" method="post">
 							<div class="form-floating mb-3">
-								<select class="form-control" name="nama_barang" id="supplier">
+								<!-- <select class="form-control" name="nama_barang" id="supplier">
 									<?php foreach ($tb_barang as $barang_view) : ?>
 										<option value="<?= $barang_view['nama_barang']; ?>"><?= $barang_view['nama_barang']; ?></option>
 									<?php endforeach; ?>
-								</select>
+								</select> -->
+								<input type="text" class="form-control mb-3" name="nama_barang">
 								<label for="inputEmail">NAMA BARANG</label>
 							</div>
 							tanggal mulai:
